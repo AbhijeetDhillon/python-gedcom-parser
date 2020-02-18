@@ -6,6 +6,7 @@ import json
 import datetime
 
 ind_details = {}
+fam_details = {}
 # gedcom parser
 
 
@@ -36,18 +37,11 @@ def calcAge(dob):
         return "NA"
     else:
         from datetime import datetime, date
-        #print(dob)
         today = date.today()
         born = datetime.strptime(dob,'%Y-%m-%d')
         age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-        #print(age)
         return age
-    # dob = datetime.strptime(input(dob), "%Y %m %d")
-    # today = date.today()
-    # return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
-
-#print(age)
-
+    
 
 def file_reading_gen(path):
     file = open(path, "r")
@@ -70,7 +64,7 @@ def file_reading_gen(path):
     idcount = 0
     # initialize_var()
     for line in file:
-        # print("-->",line.strip("\n"))
+        #print("-->",line.strip("\n"))
         liner = line.split()
         #print(liner)
 
@@ -90,6 +84,11 @@ def file_reading_gen(path):
                         elif liner[1] == "FAMS":
                             fams[fs]=(' '.join(liner[2::]))
                             fs = fs + 1
+                            fkey=(' '.join(liner[2::]))[1:-1]
+                            # print("---------------------------------")
+                            # fam_details[fkey]={'Married':'','Divorced':'','Husband ID':'','Husband Name':'','Wife ID':'','Wife Name':'','Children':''}
+                            fam_details[fkey]={'ID':fkey}
+                            #print(fam_details)
                             #print(fams)
                         elif liner[1] == "FAMC":
                             famc = (' '.join(liner[2::]))
@@ -97,10 +96,12 @@ def file_reading_gen(path):
                             # print(famc)
                         elif liner[1] == "HUSB":
                             husb = ' '.join(liner[2::])
-                            # print(husb)
+                            #fam_details[fkey]['Husband ID']=husb
+                            #print(husb)
                         elif liner[1] == "WIFE":
                             wife = ' '.join(liner[2::])
-                            # print(wife)
+                            #fam_details[fkey]['Wife ID']= wife
+                            #print(wife)
                         elif liner[1] == "CHIL":
                             chil = ' '.join(liner[2::])
                             # print(chil)
@@ -138,6 +139,12 @@ def file_reading_gen(path):
                         if liner[2] == "INDI":
                             if idcount == 1:
                                 ind_details[individual_id] = {"Name": name, 'Gender': sex, 'Birthday': birt, 'Death': deat, 'FAMS': fams, 'FAMC': famc}
+                                if(sex == 'F'):
+                                    fam_details[fkey]['Wife name']=name
+                                else:
+                                    fam_details[fkey]['Husband name']=name
+                                #print(marr)
+
                             #print(ind_details,"----------------------------------------------")
                             individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs=initialize_var(individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs)
                             individual_id = liner[1]
@@ -156,8 +163,7 @@ def file_reading_gen(path):
 
 # function calling
 file_reading_gen("Family.ged")
-
-#print(datetime.datetime.strptime('2 NOV 1995', '%d %b %Y').strftime('%Y-%m-%d'))
+print(fam_details)
 
 #pretty table
 from prettytable import PrettyTable
@@ -180,9 +186,6 @@ for key,value in ind_details.items():
     else:
         fc= "{'"+ value['FAMC'][1:-1]+"'}"
        
-
-    
- 
     #FAMS
     if value['FAMS'] == {} :
         sf= 'NA'
@@ -195,4 +198,5 @@ for key,value in ind_details.items():
     x.add_row([key[1:-1],value['Name'],value['Gender'],value['Birthday'],age,alive,value['Death'],fc,sf])
 
 #print result
-print(x)
+print("\n\n\n Individuals")
+#print(x)
