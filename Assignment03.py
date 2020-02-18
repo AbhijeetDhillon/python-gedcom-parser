@@ -4,18 +4,18 @@ li = {"0": ["INDI", "FAM", "HEAD", "TRLR", "NOTE"], "1": ["NAME", "SEX", "BIRT",
 
 
 ind_details = {}
-
 # gedcom parser
 
 
-def initialize_var():
+def initialize_var(individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs):
+    
     individual_id = ""
     name = ""
     sex = ""
     birt = ""
-    deat = ""
-    # famc = []
-    # fams = []
+    deat = 'NA'
+    famc = 'NA'
+    fams = {}
     fam = ""
     marr = ""
     husb = ""
@@ -24,8 +24,9 @@ def initialize_var():
     div = ""
     date = ""
     fs = 1
-    fc = 1
-    # idcount = 0
+    #fc = 1
+     # idcount = 0
+    return individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs
 
 
 def file_reading_gen(path):
@@ -36,7 +37,7 @@ def file_reading_gen(path):
     birt = ""
     deat = ""
     fs = 1
-    fc = 1
+    # fc = 1
     famc = ""
     fams = {}
     fam = ""
@@ -96,6 +97,7 @@ def file_reading_gen(path):
                                 birt = ' '.join(liner[2::])
                             if dcount == True:
                                 deat = ' '.join(liner[2::])
+                                print(deat)
                             if marrcount == True:
                                 marr = ' '.join(liner[2::])
                             if divcount == True:
@@ -114,11 +116,7 @@ def file_reading_gen(path):
                             if idcount == 1:
                                 ind_details[individual_id] = {"Name": name, 'Gender': sex, 'Birthday': birt, 'Death': deat, 'FAMS': fams, 'FAMC': famc}
                             #print(ind_details,"----------------------------------------------")
-                            initialize_var()
-                            fams={}
-                            # famc={}
-                            fs = 1
-                            fc = 1
+                            individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs=initialize_var(individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs)
                             individual_id = liner[1]
                             #print(individual_id)
                             idcount = 1
@@ -136,4 +134,3 @@ def file_reading_gen(path):
 # function calling
 file_reading_gen("Family.ged")
 print(ind_details)
-
