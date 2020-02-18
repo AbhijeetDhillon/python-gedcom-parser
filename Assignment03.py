@@ -1,30 +1,77 @@
-
 # Dictionary
-li = {"0": ["INDI", "FAM", "HEAD", "TRLR", "NOTE"], "1": ["NAME", "SEX", "BIRT","DEAT", "FAMC", "FAMS", "MARR", "HUSB", "WIFE", "CHIL", "DIV"], "2": ["DATE"]}
+li = {"0": ["INDI", "FAM", "HEAD", "TRLR", "NOTE"], "1": ["NAME", "SEX", "BIRT",
+                                                          "DEAT", "FAMC", "FAMS", "MARR", "HUSB", "WIFE", "CHIL", "DIV"], "2": ["DATE"]}
+#imports
+import json
+import datetime
 
 ind_details = {}
-
+fam_details = {}
 # gedcom parser
-def file_reading_gen(path, sep):
+
+
+def initialize_var(individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs):
+    
+    individual_id = ""
+    name = ""
+    sex = ""
+    birt = "NA"
+    deat = 'NA'
+    famc = 'NA'
+    fams = {}
+    fam = ""
+    marr = ""
+    husb = ""
+    wife = ""
+    chil = {}
+    div = ""
+    date = ""
+    fs = 1
+    #fc = 1
+     # idcount = 0
+    return individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs
+
+
+
+
+def calcAge(dob):
+    if(dob == "NA"):
+        return "NA"
+    else:
+        from datetime import datetime, date
+        today = date.today()
+        born = datetime.strptime(dob,'%Y-%m-%d')
+        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        return age
+    
+
+def file_reading_gen(path):
     file = open(path, "r")
+    individual_id = ""
+    name = ""
+    sex = ""
+    birt = ""
+    deat = ""
+    fs = 1
+    cs=1
+    # fc = 1
+    famc = ""
+    fams = {}
+    fam = ""
+    marr = ""
+    husb = ""
+    wife = ""
+    chil = {}
+    div = ""
+    date = ""
+    idcount = 0
+    fcount = 0
+    # initialize_var()
     for line in file:
-        # print("-->",line.strip("\n"))
+        #print("-->",line.strip("\n")) 
         liner = line.split()
-        individual_id = ""
-        name = ""
-        sex = ""
-        birt = ""
-        deat = ""
-        famc = []
-        fams = []
-        fam = ""
-        marr = ""
-        husb = ""
-        wife = ""
-        chil = ""
-        div = ""
-        date = ""
-        idcount=0
+        #print(liner)
+
         if liner[0] in ["0", "1", "2"]:
             for key, values in li.items():
 
@@ -34,25 +81,36 @@ def file_reading_gen(path, sep):
                         # print(' '.join(liner[2::]))
                         if liner[1] == "NAME":
                             name = (' '.join(liner[2::]))
-                            print(name)
+                            # print(name)
                         elif liner[1] == "SEX":
                             sex = (' '.join(liner[2::]))
-                            print(sex)
+                            # print(sex)
                         elif liner[1] == "FAMS":
-                            fams.append(' '.join(liner[2::]))
-                            print(fams)
+                            fams[fs]=(' '.join(liner[2::]))
+                            fs = fs + 1
+                            # fkey=(' '.join(liner[2::]))[1:-1]
+                            # print("---------------------------------")
+                            # fam_details[fkey]={'Married':'','Divorced':'','Husband ID':'','Husband Name':'','Wife ID':'','Wife Name':'','Children':''}
+                            # fam_details[fkey]={'ID':fkey}
+                            #print(fam_details)
+                            #print(fams)
                         elif liner[1] == "FAMC":
-                            famc.append(' '.join(liner[2::]))
-                            print(famc)
+                            famc = (' '.join(liner[2::]))
+                            # fc = fc + 1
+                            # print(famc)
                         elif liner[1] == "HUSB":
                             husb = ' '.join(liner[2::])
-                            print(husb)
+                            #fam_details[fkey]['Husband ID']=husb
+                            # print(husb)
                         elif liner[1] == "WIFE":
                             wife = ' '.join(liner[2::])
-                            print(wife)
+                            #fam_details[fkey]['Wife ID']= wife
+                            # print(wife)
                         elif liner[1] == "CHIL":
-                            chil = ' '.join(liner[2::])
-                            print(chil)
+                            chil[cs] = (' '.join(liner[2::]))
+                            cs = cs+1
+
+                            # print(chil)
                         elif liner[1] == "BIRT":
                             bcount = True
                         elif liner[1] == "DEAT":
@@ -64,41 +122,135 @@ def file_reading_gen(path, sep):
                         elif liner[1] == "DATE":
                             if bcount == True:
                                 birt = ' '.join(liner[2::])
-                            elif dcount == True:
+                                birt = datetime.datetime.strptime(birt,'%d %b %Y').strftime('%Y-%m-%d')
+                                bcount = False
+                                
+                            if dcount == True:
                                 deat = ' '.join(liner[2::])
-                            elif marrcount == True:
+                                deat = datetime.datetime.strptime(deat, '%d %b %Y').strftime('%Y-%m-%d')
+                                dcount = False
+                            if marrcount == True:
                                 marr = ' '.join(liner[2::])
-                            elif divcount == True:
+                                marr = datetime.datetime.strptime(marr, '%d %b %Y').strftime('%Y-%m-%d')
+                                marrcount = False
+                                # print("marr"+marr)
+                            if divcount == True:
                                 div = ' '.join(liner[2::])
-                            print(birt,deat,marr,div)
+                                div = datetime.datetime.strptime(div, '%d %b %Y').strftime('%Y-%m-%d')
+                                divcount = False
+                                # print("div"+div)
+                            # print(birt, deat, marr, div)
 
-                    elif len(liner) > 2 and (liner[2] in ["INDI", "FAM"]):
-                        # pass
-                        # print("<--", liner[0], sep, liner[2], sep, "Y",sep, liner[1], sep, ' '.join(liner[3::]))
-                        bcount = False
-                        dcount = False
-                        marrcount = False
-                        divcount = False
-                        # print(liner)
-                        if liner[2] == "INDI":
-                            # if idcount == "1":
-                            # print(name)
-                            ind_details[id] = {"ID":individual_id,"Name":name,'Gender':sex,'Birthday':birt,'Death':deat,'FAMS':fams,'FAMC':famc}
-                            individual_id = liner[1]
-                            # print(individual_id)
-                            idcount = 1
-                        else:
-                            fam = liner[1]
+                    elif (liner[0] == '0' and liner[2] in ["INDI", "FAM"]):
+                            # pass
+                            # print(liner[1])
+                            # print("<--", liner[0], sep, liner[2], sep, "Y",sep, liner[1], sep, ' '.join(liner[3::]))
+                            bcount = False
+                            dcount = False
+                            marrcount = False
+                            divcount = False
+                            if idcount == 1:
+                                ind_details[individual_id] = {"Name": name, 'Gender': sex, 'Birthday': birt, 'Death': deat, 'FAMS': fams, 'FAMC': famc}
+                                    # if(sex == 'F'):
+                                    #     fam_details[fkey]['Wife name']=name
+                                    # else:
+                                    #     fam_details[fkey]['Husband name']=name
+                            if fcount ==1:
+                                fam_details[fam] = {"Married": marr, 'Divorced': div, 'Husband Id': husb, 'Husband Name': ind_details.get(husb,{}).get('Name'), 'Wife Id': wife, 'Wife Name':ind_details.get(wife,{}).get('Name'),'Children':chil }
 
-                    else:
+                            # print(liner)
+                            if liner[2] == "INDI":
+                                # if idcount == 1:
+                                #     ind_details[individual_id] = {"Name": name, 'Gender': sex, 'Birthday': birt, 'Death': deat, 'FAMS': fams, 'FAMC': famc}
+                                #     if(sex == 'F'):
+                                #         fam_details[fkey]['Wife name']=name
+                                #     else:
+                                #         fam_details[fkey]['Husband name']=name
+                                    #print(marr)
+
+                                #print(ind_details,"----------------------------------------------")
+                                individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs=initialize_var(individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs)
+                                individual_id = liner[1]
+                                #print(individual_id)
+                                idcount = 1
+                            elif liner[2] == "FAM":
+                                # print(liner[1])
+                                # individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs=initialize_var(individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs)
+                                #print(ind_details.get(husb,{}).get('Name'))
+                            
+
+                                
+                                
+                                marr,div,husb,wife,chil = 'NA','NA',0,0,{}
+                                fam = liner[1]
+                                # ind_details[fam] = {"Name": name, 'Gender': sex, 'Birthday': birt, 'Death': deat, 'FAMS': fams, 'FAMC': famc}
+                                fcount = 1
+
+                    elif((liner[1] in ["_CURRENT"])):
+                        fcount = fam_details[fam] = {"Married": marr, 'Divorced': div, 'Husband Id': husb, 'Husband Name': ind_details.get(husb,{}).get('Name'), 'Wife Id': wife, 'Wife Name':ind_details.get(wife,{}).get('Name'),'Children':chil }
+
+                        # print(liner[1])
+                        # trlr = True
                         # print("<--",liner[0],sep,liner[1],sep,"N",sep,' '.join(liner[2::]))
-                        pass
+                        #pass
         else:
+            #print(liner[1])
             # print("<--",liner[0],sep,liner[1],sep,"N",sep,' '.join(liner[2::]))
             pass
 
 
-
 # function calling
-file_reading_gen("D:\Assgnments\CS 555\Assignment 3\Family.ged", "|")
-print(ind_details)
+file_reading_gen("Family.ged")
+# print(fam_details)
+
+#pretty table
+from prettytable import PrettyTable
+    
+x = PrettyTable()
+
+x2 = PrettyTable()
+
+x.field_names = ["ID", "Name", "Gender", "Birthday","Age","Alive","Death","Child","Spouse"]
+
+x2.field_names = ["ID", "Married", "Divorced", "Husband ID","Husband Name","Wife ID","Wife Name","Children"]
+
+for key,value in ind_details.items():
+    #alive or not
+    if value['Death'] == 'NA' : 
+        alive = 'True' 
+    else:
+        alive = 'False'
+    age = calcAge(value['Birthday'])
+   
+    #FAMC
+    if value['FAMC'] == 'NA' :
+        fc= 'NA'
+    else:
+        fc= "{'"+ value['FAMC'][1:-1]+"'}"
+       
+    #FAMS
+    if value['FAMS'] == {} :
+        sf= 'NA'
+    else:
+        sf = value['FAMS']   
+        sf = list(sf.values())   #converts the list  
+        sf = [s.replace('@', '') for s in sf]   #strips @ from id
+        sf=set(sf)  #convert to set
+    #add rows
+    x.add_row([key[1:-1],value['Name'],value['Gender'],value['Birthday'],age,alive,value['Death'],fc,sf])
+
+for key, value in fam_details.items():
+    if value['Children'] == {} :
+        ch = 'NA'
+    else:
+        ch = value['Children']   
+        ch = list(ch.values())   #converts the list  
+        ch = [s.replace('@', '') for s in ch]   #strips @ from id
+        ch=set(ch)  #convert to set
+    x2.add_row([key[1:-1],value['Married'],value['Divorced'],value['Husband Id'][1:-1],value['Husband Name'],value['Wife Id'][1:-1],value['Wife Name'],ch])
+
+#print result
+print("\n\n\n Individuals")
+print(x)
+print("\n\n\n  Family")
+print(x2)
