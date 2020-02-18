@@ -1,7 +1,9 @@
 # Dictionary
 li = {"0": ["INDI", "FAM", "HEAD", "TRLR", "NOTE"], "1": ["NAME", "SEX", "BIRT",
                                                           "DEAT", "FAMC", "FAMS", "MARR", "HUSB", "WIFE", "CHIL", "DIV"], "2": ["DATE"]}
-
+#imports
+import json
+import datetime
 
 ind_details = {}
 # gedcom parser
@@ -12,7 +14,7 @@ def initialize_var(individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife
     individual_id = ""
     name = ""
     sex = ""
-    birt = ""
+    birt = "NA"
     deat = 'NA'
     famc = 'NA'
     fams = {}
@@ -27,6 +29,24 @@ def initialize_var(individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife
     #fc = 1
      # idcount = 0
     return individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs
+
+
+def calcAge(dob):
+    if(dob == "NA"):
+        return "NA"
+    else:
+        from datetime import datetime, date
+        #print(dob)
+        today = date.today()
+        born = datetime.strptime(dob,'%Y-%m-%d')
+        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        #print(age)
+        return age
+    # dob = datetime.strptime(input(dob), "%Y %m %d")
+    # today = date.today()
+    # return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+
+#print(age)
 
 
 def file_reading_gen(path):
@@ -95,9 +115,12 @@ def file_reading_gen(path):
                         elif liner[1] == "DATE":
                             if bcount == True:
                                 birt = ' '.join(liner[2::])
+                                birt = datetime.datetime.strptime(birt,'%d %b %Y').strftime('%Y-%m-%d')
+                                
                             if dcount == True:
                                 deat = ' '.join(liner[2::])
-                                print(deat)
+                                deat = datetime.datetime.strptime(deat, '%d %b %Y').strftime('%Y-%m-%d')
+                                #print(deat)
                             if marrcount == True:
                                 marr = ' '.join(liner[2::])
                             if divcount == True:
@@ -133,4 +156,43 @@ def file_reading_gen(path):
 
 # function calling
 file_reading_gen("Family.ged")
-print(ind_details)
+
+#print(datetime.datetime.strptime('2 NOV 1995', '%d %b %Y').strftime('%Y-%m-%d'))
+
+#pretty table
+from prettytable import PrettyTable
+    
+x = PrettyTable()
+
+x.field_names = ["ID", "Name", "Gender", "Birthday","Age","Alive","Death","Child","Spouse"]
+
+for key,value in ind_details.items():
+    #alive or not
+    if value['Death'] == 'NA' : 
+        alive = 'True' 
+    else:
+        alive = 'False'
+    age = calcAge(value['Birthday'])
+   
+    #FAMC
+    if value['FAMC'] == 'NA' :
+        fc= 'NA'
+    else:
+        fc= "{'"+ value['FAMC'][1:-1]+"'}"
+       
+
+    
+ 
+    #FAMS
+    if value['FAMS'] == {} :
+        sf= 'NA'
+    else:
+        sf = value['FAMS']   
+        sf = list(sf.values())   #converts the list  
+        sf = [s.replace('@', '') for s in sf]   #strips @ from id
+        sf=set(sf)  #convert to set
+    #add rows
+    x.add_row([key[1:-1],value['Name'],value['Gender'],value['Birthday'],age,alive,value['Death'],fc,sf])
+
+#print result
+print(x)
