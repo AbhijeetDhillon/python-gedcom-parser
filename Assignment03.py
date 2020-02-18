@@ -37,7 +37,7 @@ def file_reading_gen(path):
     deat = ""
     fs = 1
     fc = 1
-    famc = {}
+    famc = ""
     fams = {}
     fam = ""
     marr = ""
@@ -71,9 +71,9 @@ def file_reading_gen(path):
                             fs = fs + 1
                             #print(fams)
                         elif liner[1] == "FAMC":
-                            fams[fc]=(' '.join(liner[2::]))
-                            fc = fc + 1
-                            #print(famc)
+                            famc = (' '.join(liner[2::]))
+                            # fc = fc + 1
+                            # print(famc)
                         elif liner[1] == "HUSB":
                             husb = ' '.join(liner[2::])
                             # print(husb)
@@ -116,7 +116,7 @@ def file_reading_gen(path):
                             #print(ind_details,"----------------------------------------------")
                             initialize_var()
                             fams={}
-                            famc={}
+                            # famc={}
                             fs = 1
                             fc = 1
                             individual_id = liner[1]
