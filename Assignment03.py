@@ -199,4 +199,4 @@ for key,value in ind_details.items():
 
 #print result
 print("\n\n\n Individuals")
-#print(x)
+print(x)
