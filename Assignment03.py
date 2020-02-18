@@ -141,7 +141,7 @@ def file_reading_gen(path):
                                 # print("div"+div)
                             # print(birt, deat, marr, div)
 
-                    elif (liner[0] == '0' and liner[2] in ["INDI", "FAM"]) or (liner[0] == '0' and liner[1] in ["TRLR"])  :
+                    elif (liner[0] == '0' and liner[2] in ["INDI", "FAM"]):
                             # pass
                             # print(liner[1])
                             # print("<--", liner[0], sep, liner[2], sep, "Y",sep, liner[1], sep, ' '.join(liner[3::]))
@@ -186,11 +186,13 @@ def file_reading_gen(path):
                                 # ind_details[fam] = {"Name": name, 'Gender': sex, 'Birthday': birt, 'Death': deat, 'FAMS': fams, 'FAMC': famc}
                                 fcount = 1
 
-                    else:
+                    elif((liner[1] in ["_CURRENT"])):
+                        fcount = fam_details[fam] = {"Married": marr, 'Divorced': div, 'Husband Id': husb, 'Husband Name': ind_details.get(husb,{}).get('Name'), 'Wife Id': wife, 'Wife Name':ind_details.get(wife,{}).get('Name'),'Children':chil }
+
                         # print(liner[1])
                         # trlr = True
                         # print("<--",liner[0],sep,liner[1],sep,"N",sep,' '.join(liner[2::]))
-                        pass
+                        #pass
         else:
             #print(liner[1])
             # print("<--",liner[0],sep,liner[1],sep,"N",sep,' '.join(liner[2::]))
@@ -198,7 +200,7 @@ def file_reading_gen(path):
 
 
 # function calling
-file_reading_gen("000.ged")
+file_reading_gen("Family.ged")
 # print(fam_details)
 
 #pretty table
