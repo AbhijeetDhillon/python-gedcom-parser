@@ -1,9 +1,10 @@
 # Dictionary
-
+import dateutil.parser as dparser
 from datetime import datetime
+import dateutil.parser
 import datetime
 import json
-
+import fileinput
 
 li = {"0": ["INDI", "FAM", "HEAD", "TRLR", "NOTE"], "1": ["NAME", "SEX", "BIRT",
                                                           "DEAT", "FAMC", "FAMS", "MARR", "HUSB", "WIFE", "CHIL", "DIV"], "2": ["DATE"]}
@@ -43,9 +44,6 @@ def dateCalc(dat):
            return datetime.datetime.strptime(dat,'%d %b %Y').strftime('%Y-%m-%d') 
 
     except ValueError:
-
-           print(len(dat))
-           print("exception")
            if((len(dat)==4)):
                return dat
            else:
@@ -222,16 +220,17 @@ def file_reading_gen(path):
 
 # function calling
 # file_reading_gen("000.ged")
+filename1="000.ged"
 filename="Keanu_Reeves_Family.ged"
-file_reading_gen(filename)
+file_reading_gen(filename1)
 # print(fam_details)
 
 
-for x in fam_details.items():
-    print(x)
+# for x in fam_details.items():
+#     print(x)
 
-for x in ind_details.items():
-    print(x)
+# for x in ind_details.items():
+#     print(x)
 
 # pretty table
 from prettytable import PrettyTable
@@ -273,13 +272,17 @@ for key,value in ind_details.items():
     x.add_row([key[1:-1],value['Name'],value['Gender'],value['Birthday'],age,alive,value['Death'],fc,sf])
 
 for key, value in fam_details.items():
+    # print(value['Children'])
     if value['Children'] == {} :
-        ch = 'NA'
+        ch = "NA"
+        # ch = set(ch)
     else:
         ch = value['Children']   
         ch = list(ch.values())   #converts the list  
         ch = [s.replace('@', '') for s in ch]   #strips @ from id
+        # print(ch)
         ch=set(ch)  #convert to set
+        # print(ch)
     x2.add_row([key[1:-1],value['Married'],value['Divorced'],value['Husband Id'][1:-1],value['Husband Name'],value['Wife Id'][1:-1],value['Wife Name'],ch])
 
 # print result
