@@ -241,6 +241,9 @@ def formingPrettyTable(familyDetails,indiDetails):
     print("\n\n\n  Family")
     print(x2)
 
+    # print(ind_details)
+    # print(fam_details)
+    
 #---------------Pretty Table ends---------------#
 
 
@@ -307,39 +310,9 @@ def US02(i,f):
           wflag="NA"
         y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
 
-
-
-      # if(e[0] > e[2] and e[0] > e[4] and e[0]!="NA"):
-      #    hflag="true"
-      #    wflag="true"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
-      # elif(e[2]=="NA" and e[4]!="NA" and e[0]!="NA" and e[0] > e[4]):
-      #    hflag="NA"
-      #    wflag="true"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
-      # elif(e[2]!="NA" and e[4]=="NA" and e[0]!="NA" and e[0] > e[2]):
-      #    hflag="true"
-      #    wflag="NA"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
-      # elif(e[2]=="NA" and e[4]=="NA" and e[0]!="NA"):
-      #    hflag="NA"
-      #    wflag="NA"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
-      # elif(e[2]=="NA" and e[4]=="NA" and e[0]=="NA"):
-      #    hflag="NA"
-      #    wflag="NA"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
-      # else:
-      #    if(e[0]=="NA"):
-      #      hflag="NA"
-      #      wflag="NA"
-      #    else:
-      #      hflag="false"
-      #      wflag="false"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
       
     print(y1)
-    return y1
+    return "True"
 
 #user story 05
 def US05(i,f):
@@ -351,39 +324,44 @@ def US05(i,f):
         else:
             y=[k[1:-1],"NA"]
             datelist.append(y)
-    #print(datelist)
+    #print(datelist)   #list of all deathdates
 
     ls=[]
     for v in f.values():
         if(v["Married"] != "NA"):
             x=[v["Married"],v["Husband Id"][1:-1],v["Wife Id"][1:-1]]
             ls.append(x)
+            
         else:
             x=["NA",v["Husband Id"][1:-1],v["Wife Id"][1:-1]]
             ls.append(x)
-    #print(ls)  
+           
+    #print("ls = ",ls)  #list of married ids
 
     result = []
     for a in ls:
         hid=a[1]
         wid=a[2]
         l_datelist=len(datelist)
+        
         for i in range(l_datelist):
             if(datelist[i][0]==hid):
                 hdate=datelist[i][1]
-                a = a + [hdate]
+                a.insert(3,hdate)
+                
+            elif(datelist[i][0]==wid):
+                 wdate=datelist[i][1]
+                 a.insert(4,wdate)
+                 
             else:
                 hdate="NA"
                 a = a + [hdate]
-        for i in range(l_datelist):    
-            if(datelist[i][0]==wid):
-                wdate=datelist[i][1]
-                a = a + [wdate]
-            else:
-                wdate="NA"
-                a = a + [wdate]
+               
+
         d=[a[0],hid,hdate,wid,wdate]
         result.append(d)
+
+    #print(result)    
     ct=0
     for x in f:
       result[ct].append(x[1:-1])
@@ -409,38 +387,12 @@ def US05(i,f):
         if(e[4]=="NA"):
           wflag="NA"
         y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
-      # if(e[0] < e[2] and e[0] < e[4] and e[0]!="NA"):
-      #    hflag="true"
-      #    wflag="true"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
-      # elif(e[2]=="NA" and e[4]!="NA" and e[0]!="NA" and e[0] < e[4]):
-      #    hflag="NA"
-      #    wflag="true"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
-      # elif(e[2]!="NA" and e[4]=="NA" and e[0]!="NA" and e[0] < e[2]):
-      #    hflag="true"
-      #    wflag="NA"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
-      # elif(e[2]=="NA" and e[4]=="NA" and e[0]!="NA"):
-      #    hflag="NA"
-      #    wflag="NA"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
-      # elif(e[2]=="NA" and e[4]=="NA" and e[0]=="NA"):
-      #    hflag="NA"
-      #    wflag="NA"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
-      # else:
-      #    if(e[0]=="NA"):
-      #      hflag="NA"
-      #      wflag="NA"
-      #    else:
-      #      hflag="false"
-      #      wflag="false"
-      #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
+      
     print(y1)
-
+    return "True"
 
 #Aishwarya's Section End
+
 
 
 
@@ -498,24 +450,97 @@ def US03(indiDetails):
 
 #------------------Start : Testing Function With Test Cases--------------------#
 
-# class TestContainer(unittest.TestCase):
-#     def US03Test(self):
 
-#         test1 = {"Name": "Tester 1", 'Gender': "Male", 'Birthday': "2000-03-13", 'Death': "1999-03-17", 'FAMS': "F9", 'FAMC': "f9"}
+class TestContainer(unittest.TestCase):
+        
+        def test_US02(self):
+            #all values of birthdays and death days given
+            si1={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+            sf1={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+          
+            #birthdays missing
+            si2={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': 'NA', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+            sf2={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+          
+            #marriage dates missing
+            si4={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+            sf4={'@F1@': {'Married': 'NA', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+          
+            #marriage before birthday
+            si5={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+            sf5={'@F1@': {'Married': '1950-01-01', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+          
+    
+            for i in range(1):
+                print("\n\n All values of birthdays and death days given\n")
+                #all values of birthdays and death days given
+                self.assertEqual(US02(si1,sf1),"True")
+                self.assertEqual(US05(si1,sf1),"True")
 
-#         """to verify that anagram_1st works properly"""
-#         self.assertTrue(US03(test1, True))
-#         # self.assertTrue(US03("", "dirtyroom"))
-#         # self.assertTrue(US03("DORMITORY", "dirtyroom"))
-#         # self.assertTrue(US03("122Dirtry", ""))
-#         # self.assertTrue(US03("Iceman", "Cinema"))
+                print("\n\n Birthdays missing\n")
+                #birthdays missing
+                self.assertEqual(US02(si2,sf2),"True")
+                self.assertEqual(US05(si2,sf2),"True")
 
+                print("\n\n Marriage dates missing\n")
+                #marriage dates missing
+                self.assertEqual(US02(si4,sf4),"True")
+                self.assertEqual(US05(si4,sf4),"True")
+            
+                print("\n\n Marriage before birth\n")
+                #marriage before birthday
+                self.assertEqual(US02(si5,sf5),"True")
+                self.assertEqual(US05(si5,sf5),"True")
+
+          
+        def test_US05(self):
+            #all values of birthdays and death days given
+            si1={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+            sf1={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+          
+            #deathdates missing
+            si3={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+            sf3={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+          
+            #marriage dates missing
+            si4={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+            sf4={'@F1@': {'Married': 'NA', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+        
+            #death before marriage
+            si6={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '1980-08-15', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+            sf6={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+          
+            for i in range(1):
+                print("\n\n All values of birthdays and death days given\n")
+                #all values of birthdays and death days given
+                self.assertEqual(US02(si1,sf1),"True")
+                self.assertEqual(US05(si1,sf1),"True")
+
+                print("\n\n Deathdates missing\n")
+                #deathdates missing
+                self.assertEqual(US02(si3,sf3),"True")
+                self.assertEqual(US05(si3,sf3),"True")
+
+                print("\n\n Marriage dates missing\n")
+                #marriage dates missing
+                self.assertEqual(US02(si4,sf4),"True")
+                self.assertEqual(US05(si4,sf4),"True")
+
+                print("\n\n Death before marriage\n")
+                #death before marriage
+                self.assertEqual(US02(si6,sf6),"True")
+                self.assertEqual(US05(si6,sf6),"True")
+
+       
 if __name__ == '__main__':
     filename1="Family.ged"
-    filename2="Keanu_Reeves_Family.ged" #not used
+    filename2="Keanu_Reeves_Family.ged"
     filename3="000.ged"
-    filename4="fam2.ged" #not used
-    filename5="My-Family.ged" #not used
+    filename4="fam2.ged"
+    filename5="My-Family.ged"
 
     file_reading_gen(filename3)
-    #unittest.main(exit=False, verbosity=2)
+    #unittest.main()
+    unittest.main(exit=False, verbosity=2)
+    
+    
