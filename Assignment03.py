@@ -1,186 +1,11 @@
-import dateutil.parser as dparser
 from datetime import datetime
-import dateutil.parser
 import datetime
 import json
 import fileinput
 import unittest
 from prettytable import PrettyTable
+from parserLogic import calcAge,file_reading_gen,dateCalc
 
-li = {"0": ["INDI", "FAM", "HEAD", "TRLR", "NOTE"], "1": ["NAME", "SEX", "BIRT",
-                                                          "DEAT", "FAMC", "FAMS", "MARR", "HUSB", "WIFE", "CHIL", "DIV"], "2": ["DATE"]}
-# imports
-
-ind_details = {}
-fam_details = {}
-# gedcom parser
-
-
-def initialize_var(individual_id, name, sex, birt, deat, fams, famc, fam, marr, husb, wife, chil, div, date, fs):
-
-    individual_id = ""
-    name = ""
-    sex = ""
-    birt = "NA"
-    deat = 'NA'
-    famc = 'NA'
-    fams = {}
-    fam = ""
-    marr = ""
-    husb = ""
-    wife = ""
-    chil = {}
-    div = ""
-    date = ""
-    fs = 1
-    # fc = 1
-     # idcount = 0
-    return individual_id, name, sex, birt, deat, fams, famc, fam, marr, husb, wife, chil, div, date, fs
-
-
-def dateCalc(dat):
-
-    try:
-        if(len(datetime.datetime.strptime(dat,'%d %b %Y').strftime('%Y-%m-%d')) == 10):
-           return datetime.datetime.strptime(dat,'%d %b %Y').strftime('%Y-%m-%d') 
-
-    except ValueError:
-           if((len(dat)==4)):
-               return dat
-           else:
-               return 'NA'
-      
-
-
-def calcAge(dob):
-    if(dob == "NA"):
-        return "NA"
-    else:
-        from datetime import datetime, date
-        today = date.today()
-        born = datetime.strptime(dob,'%Y-%m-%d')
-        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-        return age
-    
-
-#-------------Parser Starts----------#
-
-def file_reading_gen(path):
-    file = open(path, "r")
-    ind_details = {}
-    fam_details = {}
-    individual_id = ""
-    name = ""
-    sex = ""
-    birt = ""
-    deat = ""
-    fs = 1
-    cs=1
-    # fc = 1
-    famc = ""
-    fams = {}
-    fam = ""
-    marr = ""
-    husb = ""
-    wife = ""
-    chil = {}
-    div = ""
-    date = ""
-    idcount = 0
-    fcount = 0
-   
-    for line in file:
-
-        liner = line.split()
-        if(liner == []):
-            continue
-
-        elif liner[0] in ["0", "1", "2"]:
-            for key, values in li.items():
-
-                if liner[0] == key:
-                    if liner[1] in values and liner[1] not in ["INDI", "FAM"]:
-                        if liner[1] == "NAME":
-                            name = (' '.join(liner[2::]))
-                        elif liner[1] == "SEX":
-                            sex = (' '.join(liner[2::]))
-                        elif liner[1] == "FAMS":
-                            fams[fs]=(' '.join(liner[2::]))
-                            fs = fs + 1
-                        elif liner[1] == "FAMC":
-                            famc = (' '.join(liner[2::]))
-                        elif liner[1] == "HUSB":
-                            husb = ' '.join(liner[2::])
-                        elif liner[1] == "WIFE":
-                            wife = ' '.join(liner[2::])
-                        elif liner[1] == "CHIL":
-                            chil[cs] = (' '.join(liner[2::]))
-                            cs = cs+1
-                        elif liner[1] == "BIRT":
-                            bcount = True
-                        elif liner[1] == "DEAT":
-                            dcount = True
-                            deat="dead"
-                        elif liner[1] == "MARR":
-                            marrcount = True
-                        elif liner[1] == "DIV":
-                            divcount = True
-                        elif liner[1] == "DATE":
-                            if bcount == True:
-                                birt = ' '.join(liner[2::])
-                                birt = dateCalc(birt)
-                                bcount = False
-                                
-                            if dcount == True:
-                                deat = ' '.join(liner[2::])
-                                deat = dateCalc(deat)
-                                dcount = False
-                            if marrcount == True:
-                                marr = ' '.join(liner[2::])
-                                marr = dateCalc(marr)
-                                marrcount = False
-                            if divcount == True:
-                                div = ' '.join(liner[2::])
-                                div = dateCalc(div)
-                                divcount = False
-
-                    elif (liner[0] == '0' and liner[2] in ["INDI", "FAM"]):
-                            bcount = False
-                            dcount = False
-                            marrcount = False
-                            divcount = False
-                            if idcount == 1:
-                                ind_details[individual_id] = {"Name": name, 'Gender': sex, 'Birthday': birt, 'Death': deat, 'FAMS': fams, 'FAMC': famc}
-                                   
-                            if fcount ==1:
-                                fam_details[fam] = {"Married": marr, 'Divorced': div, 'Husband Id': husb, 'Husband Name': ind_details.get(husb,{}).get('Name'), 'Wife Id': wife, 'Wife Name':ind_details.get(wife,{}).get('Name'),'Children':chil }
-
-                            if liner[2] == "INDI":
-                                individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs=initialize_var(individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs)
-                                individual_id = liner[1]
-                                idcount = 1
-                            elif liner[2] == "FAM":
-                                marr,div,husb,wife,chil = 'NA','NA',0,0,{}
-                                fam = liner[1]
-                                fcount = 1
-
-                    elif((liner[1] in ["_CURRENT"])):
-                        fcount = fam_details[fam] = {"Married": marr, 'Divorced': div, 'Husband Id': husb, 'Husband Name': ind_details.get(husb,{}).get('Name'), 'Wife Id': wife, 'Wife Name':ind_details.get(wife,{}).get('Name'),'Children':chil }
-
-        else:
-            pass
-    formingPrettyTable(fam_details,ind_details)
-
-    #---------Start Calling User Story Test Cases-------------#
-
-    US03(ind_details)
-    US02(ind_details,fam_details)
-    US05(ind_details,fam_details)
-     
-    #---------End Calling User Story Test Cases---------------#
-
-#----------Parser Ends----------------------#
-  
 
 #----------Pretty Table Starts--------------#
 
@@ -241,9 +66,6 @@ def formingPrettyTable(familyDetails,indiDetails):
     print("\n\n\n  Family")
     print(x2)
 
-    # print(ind_details)
-    # print(fam_details)
-    
 #---------------Pretty Table ends---------------#
 
 
@@ -298,20 +120,31 @@ def US02(i,f):
       if(e[0]=="NA"):
         hflag="NA"
         wflag="NA"
-        y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
+        print("ERROR: Family: US02:",e[5],": Marriage date not given")
+    #    y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
       else:
-        if(e[0] > e[2]):
-          hflag="True"
-        if(e[0] > e[4]):
-          wflag="True"
+        # if(e[0] > e[2]):
+        #   hflag="True"
+        #   print("ERROR: Family: US02:",e[5],": Husband's birthdate ",e[2]," before marriage date ",e[0])
+        # if(e[0] > e[4]):
+        #   wflag="True"
+        #   print("ERROR: Family: US02:",e[5],": Wife's birthdate ",e[4]," before marriage date ",e[0])
+        if(e[0] < e[2]):
+          hflag="False"
+          print("ERROR: Family: US02:",e[5],": Husband's birthdate ",e[2]," after marriage date ",e[0])
+        if(e[0] < e[4]):
+          wflag="False"
+          print("ERROR: Family: US02:",e[5],": Wife's birthdate ",e[4]," after marriage date ",e[0])
         if(e[2]=="NA"):
           hflag="NA"
+          print("ERROR: Family: US02:",e[5],": Husband birth date not given")
         if(e[4]=="NA"):
           wflag="NA"
-        y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
+          print("ERROR: Family: US02:",e[5],": Wife birth date not given")
+        # y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
 
       
-    print(y1)
+    #print(y1)
     return "True"
 
 #user story 05
@@ -324,7 +157,6 @@ def US05(i,f):
         else:
             y=[k[1:-1],"NA"]
             datelist.append(y)
-    #print(datelist)   #list of all deathdates
 
     ls=[]
     for v in f.values():
@@ -336,7 +168,6 @@ def US05(i,f):
             x=["NA",v["Husband Id"][1:-1],v["Wife Id"][1:-1]]
             ls.append(x)
            
-    #print("ls = ",ls)  #list of married ids
 
     result = []
     for a in ls:
@@ -361,7 +192,6 @@ def US05(i,f):
         d=[a[0],hid,hdate,wid,wdate]
         result.append(d)
 
-    #print(result)    
     ct=0
     for x in f:
       result[ct].append(x[1:-1])
@@ -376,38 +206,52 @@ def US05(i,f):
       if(e[0]=="NA"):
         hflag="NA"
         wflag="NA"
-        y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
+        print("ERROR: Family: US05:",e[5],": Marriage date not given")
+        # y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
       else:
-        if(e[0] < e[2]):
-          hflag="True"
-        if(e[0] < e[4]):
-          wflag="True"
+        # if(e[0] < e[2]):
+        #   hflag="True"
+        #   print("ERROR: Family: US05:",e[5],": Husband's deathdate ",e[2]," after marriage date ",e[0])
+        # if(e[0] < e[4]):
+        #   wflag="True"
+        #   print("ERROR: Family: US05:",e[5],": Husband's deathdate ",e[2]," after marriage date ",e[0])
+        if(e[0] > e[2]):
+          hflag="False"
+          print("ERROR: Family: US05:",e[5],": Husband's deathdate ",e[2]," before marriage date ",e[0])
+        if(e[0] > e[4]):
+          wflag="False"
+          print("ERROR: Family: US05:",e[5],": Wife's deathdate ",e[2]," before marriage date ",e[0])
         if(e[2]=="NA"):
           hflag="NA"
+          print("ERROR: Family: US05:",e[5],": Husband's deathdate not given")
         if(e[4]=="NA"):
           wflag="NA"
-        y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
+          print("ERROR: Family: US05:",e[5],": Wife's deathdate not given")
+        # y1.add_row([e[5],e[0],e[2],e[4],hflag,wflag])
       
-    print(y1)
+    #print(y1)
     return "True"
+
+
 
 #Aishwarya's Section End
 
 
 
-
 #Abhijeet's Section Start
-def US03(indiDetails):
+def us03_birth_b4_death(indiDetails):
 
     ind_details = indiDetails
     prettyTable03 = PrettyTable()
-    prettyTable03.field_names = ["Birth Date", "Death Date","DeathBeforeBirth"]
+    prettyTable03.field_names = ["ID","Birth Date", "Death Date","DeathBeforeBirth"]
     deathBeforeBirth = []
     deathList = []
     birthlist = []
-    isdeathBeforeBirth = False
+    idList = []
+    isdeathBeforeBirth = "False"
     for key,value in ind_details.items():
-        isdeathBeforeBirth = False
+    
+        idList.append(key[1:-1])
         if len(value['Death'])==10:
             deathList.append(value['Death'])
         else:
@@ -420,127 +264,139 @@ def US03(indiDetails):
 
     for i in range(len(birthlist)):
 
-        if(deathList[i] != "NA" and birthlist !="NA"):
+        if(deathList[i] != "NA" and birthlist[i] !="NA"):
             if(deathList[i]<birthlist[i]):
                 deathBeforeBirth.append("True")
-                isdeathBeforeBirth = True
-            else:
-                deathBeforeBirth.append("False")    
-
-        else:
-            deathBeforeBirth.append("NA")
-        
-
-        prettyTable03.add_row([birthlist[i],deathList[i],deathBeforeBirth[i]])
-        
-        
-    print("\n\n\n User Story 03- Death Before Birth")
-    print(prettyTable03)
+                isdeathBeforeBirth = "True"
+                print("ERROR: INDIVIDUAL: US03:",idList[i],"Died",deathList[i],"before born",birthlist[i])
+            
     return isdeathBeforeBirth
+
+
+def us04_marr_b4_divorce(famDetails):
+    fam_details = famDetails
+    prettyTable04 = PrettyTable()
+    prettyTable04.field_names = ["ID","Marriage Date", "Divorce Date","DivorceBeforeMarriage"]
+    divorceBeforeMarriage = []
+
+    marriageList = []
+    divorceList =[]
+    idList = []
+    isDivorceBeforeMarriage = "False"
+    for key, value in fam_details.items():
+        idList.append(key[1:-1])
+        if len(value['Married']) == 10:
+            marriageList.append(value['Married'])
+        else:
+            marriageList.append('NA')
+        
+        if len(value['Divorced']) == 10:
+            divorceList.append(value['Divorced'])
+        else:
+            divorceList.append('NA')
+
+    for i in range(len(marriageList)):
+
+        if(divorceList[i] !='NA' and marriageList[i]!='NA'):
+
+            if(divorceList[i]<marriageList[i]):
+                divorceBeforeMarriage.append('True')
+                isDivorceBeforeMarriage = "True"
+                print("ERROR: Family: US04:",idList[i],"Divorce",divorceList[i],"before married",marriageList[i])
+
+    return isDivorceBeforeMarriage   
 
 #Abhijeet's Section End
 
 
 #Dinesh's Section Start
 
+def userstory1(indiDetails,familyDetails):
+    
+    today = datetime.datetime.now()
+    today = datetime.datetime.strftime(today,'%Y-%m-%d')
+    list_date=[]
+    event_list =[]
+    final_date_list=[]
+    isDateBeforeToday ="FALSE"
+    id_list =[]
+    for key,value in indiDetails.items():
+        
+        if (len(value['Birthday'])) == 10 :
+            id_list.append(key[1:-1])
+            list_date.append(value['Birthday'])
+            event_list.append("Birthday")
+        if (len(value['Death'])) == 10 :
+            id_list.append(key[1:-1])
+            list_date.append(value['Death'])
+            event_list.append("Death")
+    for key,value in familyDetails.items():
+        id_list.append(key[1:-1])    
+        if (len(value['Married'])) == 10 :
+            id_list.append(key[1:-1])
+            list_date.append(value['Married'])
+            event_list.append("Marriage")
+        if (len(value['Divorced'])) == 10 :
+            id_list.append(key[1:-1])
+            list_date.append(value['Divorced'])
+            event_list.append("Divorce")
+    
+
+    prettyTable01 = PrettyTable()
+    prettyTable01.field_names = [ "Today","Dates","DatesBeforeCurrentDate"]
+    for i in range(len(list_date)):
+    
+        if list_date[i] > today:
+            final_date_list.append("TRUE")
+            isDateBeforeToday ="TRUE"
+            if(event_list[i] == "Marriage" or event_list[i] == "Divorce" ):
+                print("FAMILY: US01:",id_list[i],event_list[i],list_date[i],"occurs in future")
+            else:
+                print("INDIVIDUAL: US01:",id_list[i],event_list[i],list_date[i],"occurs in future")
+    return isDateBeforeToday
+
+
+def userstory8(indiDetails,familyDetails):
+    m = PrettyTable()
+    isBirthBeforeMarriage = "NA"
+    marriageDate = "NA"
+    m.field_names=['Name','Birthday','Parent Marriage Date','IsBirthBeforeMarriage']
+    for value in indiDetails.values():
+
+        if (value['FAMC']) != "NA" and (value['Birthday']) != "NA" and (familyDetails[value['FAMC']]['Married']) != "NA" :
+            if (familyDetails[value['FAMC']]['Married']) > (value['Birthday']) :
+                isBirthBeforeMarriage = "TRUE"
+                marriageDate = familyDetails[value['FAMC']]['Married']
+            else:
+                isBirthBeforeMarriage = "FALSE"
+                marriageDate = familyDetails[value['FAMC']]['Married']
+        
+        else:
+            isBirthBeforeMarriage = "NA"
+            marriageDate = "NA"
+        m.add_row([value['Name'],value['Birthday'],marriageDate,isBirthBeforeMarriage])
+    print("\n\n\n User Story 08- Birth before marriage of parents")
+    print(m)
+    return isBirthBeforeMarriage
+    
 
 #Dinesh's Section End
 
-
-
-#------------------Start : Testing Function With Test Cases--------------------#
-
-
-class TestContainer(unittest.TestCase):
-        
-        def test_US02(self):
-            #all values of birthdays and death days given
-            si1={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
-            sf1={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
-          
-            #birthdays missing
-            si2={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': 'NA', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
-            sf2={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
-          
-            #marriage dates missing
-            si4={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
-            sf4={'@F1@': {'Married': 'NA', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
-          
-            #marriage before birthday
-            si5={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
-            sf5={'@F1@': {'Married': '1950-01-01', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
-          
-    
-            for i in range(1):
-                print("\n\n All values of birthdays and death days given\n")
-                #all values of birthdays and death days given
-                self.assertEqual(US02(si1,sf1),"True")
-                self.assertEqual(US05(si1,sf1),"True")
-
-                print("\n\n Birthdays missing\n")
-                #birthdays missing
-                self.assertEqual(US02(si2,sf2),"True")
-                self.assertEqual(US05(si2,sf2),"True")
-
-                print("\n\n Marriage dates missing\n")
-                #marriage dates missing
-                self.assertEqual(US02(si4,sf4),"True")
-                self.assertEqual(US05(si4,sf4),"True")
-            
-                print("\n\n Marriage before birth\n")
-                #marriage before birthday
-                self.assertEqual(US02(si5,sf5),"True")
-                self.assertEqual(US05(si5,sf5),"True")
-
-          
-        def test_US05(self):
-            #all values of birthdays and death days given
-            si1={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
-            sf1={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
-          
-            #deathdates missing
-            si3={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
-            sf3={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
-          
-            #marriage dates missing
-            si4={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
-            sf4={'@F1@': {'Married': 'NA', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
-        
-            #death before marriage
-            si6={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '1980-08-15', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
-            sf6={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
-          
-            for i in range(1):
-                print("\n\n All values of birthdays and death days given\n")
-                #all values of birthdays and death days given
-                self.assertEqual(US02(si1,sf1),"True")
-                self.assertEqual(US05(si1,sf1),"True")
-
-                print("\n\n Deathdates missing\n")
-                #deathdates missing
-                self.assertEqual(US02(si3,sf3),"True")
-                self.assertEqual(US05(si3,sf3),"True")
-
-                print("\n\n Marriage dates missing\n")
-                #marriage dates missing
-                self.assertEqual(US02(si4,sf4),"True")
-                self.assertEqual(US05(si4,sf4),"True")
-
-                print("\n\n Death before marriage\n")
-                #death before marriage
-                self.assertEqual(US02(si6,sf6),"True")
-                self.assertEqual(US05(si6,sf6),"True")
-
-       
 if __name__ == '__main__':
-    filename1="Family.ged"
-    filename2="Keanu_Reeves_Family.ged"
-    filename3="000.ged"
-    filename4="fam2.ged"
-    filename5="My-Family.ged"
 
-    file_reading_gen(filename3)
-    #unittest.main()
+
+    
+    filename1="Family.ged"
+    filename="000.ged"
+    fam_details, ind_details = file_reading_gen(filename)
+    formingPrettyTable(fam_details,ind_details)
     unittest.main(exit=False, verbosity=2)
-    
-    
+
+    #Calling User Stories
+
+    us03_birth_b4_death(ind_details)
+    us04_marr_b4_divorce(fam_details)
+    US02(ind_details,fam_details)
+    US05(ind_details,fam_details)
+    userstory1(ind_details,fam_details)
+    userstory8(ind_details,fam_details)
