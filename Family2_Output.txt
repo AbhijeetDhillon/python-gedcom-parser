@@ -1,0 +1,47 @@
+ Individuals
++-----+-----------------+--------+------------+-----+-------+------------+--------+--------------+
+|  ID |       Name      | Gender |  Birthday  | Age | Alive |   Death    | Child  |    Spouse    |
++-----+-----------------+--------+------------+-----+-------+------------+--------+--------------+
+|  I1 | Hussain /Manto/ |   M    | 1948-08-04 |  71 |  True |     NA     |   NA   | {'F2', 'F1'} |
+|  I2 | Savitri /Manto/ |   F    | 1999-06-05 |  20 | False | 1985-07-13 |   NA   |    {'F2'}    |
+|  I3 |  Manju /Manto/  |   F    | 1972-11-10 |  47 |  True |     NA     | {'F2'} |    {'F3'}    |
+|  I4 |  Rizwan /Manto/ |   M    | 1980-05-09 |  39 |  True |     NA     | {'F2'} |    {'F4'}    |
+|  I5 |  Kavita /Manto/ |   F    | 2001-07-17 |  18 |  True |     NA     |   NA   |    {'F1'}    |
+|  I6 |  Billa /Manto/  |   M    | 1990-10-05 |  29 |  True |     NA     | {'F1'} |    {'F5'}    |
+|  I7 |  Rashmi /Manto/ |   F    | 1992-12-06 |  27 |  True |     NA     | {'F1'} |    {'F6'}    |
+|  I8 | Ramesh /Huliya/ |   M    | 1970-06-12 |  49 |  True |     NA     |   NA   |    {'F3'}    |
+|  I9 |  Ramya /Bhevri/ |   F    | 1985-07-07 |  34 |  True |     NA     |   NA   |    {'F4'}    |
+| I10 | Tulsi /Gaikwad/ |   F    | 1993-10-13 |  26 |  True |     NA     |   NA   |    {'F5'}    |
+| I11 |  Yogesh /Patel/ |   M    | 1988-07-05 |  31 |  True |     NA     |   NA   |    {'F6'}    |
+| I12 |   Sonu /Manto/  |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
+| I13 |  Jinesh /Patel/ |   M    |     NA     |  NA |  True |     NA     | {'F6'} |      NA      |
+| I14 |  Trish /Huliya/ |        |     NA     |  NA |  True |     NA     | {'F3'} |      NA      |
+| I15 |  Nikhil /Manto/ |   F    | 2025-12-03 |  -6 |  True |     NA     | {'F4'} |      NA      |
++-----+-----------------+--------+------------+-----+-------+------------+--------+--------------+
+
+
+
+  Family
++----+------------+------------+------------+-----------------+---------+-----------------+--------------+
+| ID |  Married   |  Divorced  | Husband ID |   Husband Name  | Wife ID |    Wife Name    |   Children   |
++----+------------+------------+------------+-----------------+---------+-----------------+--------------+
+| F1 | 2000-07-13 |     NA     |     I1     | Hussain /Manto/ |    I5   |  Kavita /Manto/ | {'I7', 'I6'} |
+| F2 | 2001-04-04 |     NA     |     I1     | Hussain /Manto/ |    I2   | Savitri /Manto/ | {'I3', 'I4'} |
+| F3 |     NA     |     NA     |     I8     | Ramesh /Huliya/ |    I3   |  Manju /Manto/  |   {'I14'}    |
+| F4 |     NA     |     NA     |     I4     |  Rizwan /Manto/ |    I9   |  Ramya /Bhevri/ |   {'I15'}    |
+| F5 | 2012-09-06 | 2010-11-06 |     I6     |  Billa /Manto/  |   I10   | Tulsi /Gaikwad/ |   {'I12'}    |
+| F6 |     NA     |     NA     |    I11     |  Yogesh /Patel/ |    I7   |  Rashmi /Manto/ |   {'I13'}    |
++----+------------+------------+------------+-----------------+---------+-----------------+--------------+
+
+
+
+
+ERROR: INDIVIDUAL: US03: I2 Died 1985-07-13 before born 1999-06-05
+ERROR: Family: US04: F5 Divorce 2010-11-06 before married 2012-09-06
+ERROR: Family: US02: F1 : Wife's birthdate  2001-07-17  after marriage date  2000-07-13
+ERROR: Family: US05: F2 : Wife's deathdate  NA  before marriage date  2001-04-04
+ERROR: INDIVIDUAL: US01: I15 Birthday 2025-12-03 occurs in future
+ERROR: Family: US08:  Child  I3 born  1972-11-10 before marriage date on  2001-04-04
+ERROR: Family: US08:  Child  I4 born  1980-05-09 before marriage date on  2001-04-04
+ERROR: Family: US08:  Child  I6 born  1990-10-05 before marriage date on  2000-07-13
+ERROR: Family: US08:  Child  I7 born  1992-12-06 before marriage date on  2000-07-13
