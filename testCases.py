@@ -1,6 +1,6 @@
 import unittest
 
-from Assignment03 import US02,US05,us03_birth_b4_death,us04_marr_b4_divorce,userstory1,userstory8
+from mainUserStoryFile import US02,US05,us03_birth_b4_death,us04_marr_b4_divorce,userstory1,userstory8,us06_div_b4_death,us07_age_lessthan_150
 from parserLogic import file_reading_gen
 
 class TestContainer(unittest.TestCase):
@@ -127,6 +127,33 @@ class TestContainer(unittest.TestCase):
         #birth before birthday
         self.assertEqual(us04_marr_b4_divorce(sf5),"True")
 
+
+    def test_us06_div_b4_death(self):
+
+        si1={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1900-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        sf1={'@F1@': {'Married': '1990-06-15', 'Divorced': '2300-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+       
+        si2={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1900-01-01', 'Death': '2002-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        sf2={'@F1@': {'Married': '1990-06-15', 'Divorced': '2001-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+       
+        si3={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1900-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2004-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        sf3={'@F1@': {'Married': '1990-06-15', 'Divorced': '2001-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+       
+        si4={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1900-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        sf4={'@F1@': {'Married': '1990-06-15', 'Divorced': '1900-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+       
+        self.assertEqual(us06_div_b4_death(si1,sf1),"True")
+        self.assertEqual(us06_div_b4_death(si2,sf2),"True")
+        self.assertEqual(us06_div_b4_death(si3,sf3),"True")
+        self.assertEqual(us06_div_b4_death(si4,sf4),"False")
+
+    def test_us07_age_lessthan_150(self):
+
+        si1={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1800-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        si2={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+
+        self.assertEqual(us07_age_lessthan_150(si1),"True")
+        self.assertEqual(us07_age_lessthan_150(si2),"False")
 
     #-------------------Abhijeet's Tetst Case Section End--------------------#
 
