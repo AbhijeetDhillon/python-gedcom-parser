@@ -1,12 +1,12 @@
 import unittest
 
-from mainUserStoryFile import US02,US05,us03_birth_b4_death,us04_marr_b4_divorce,userstory1,userstory8,us06_div_b4_death,us07_age_lessthan_150
+from mainUserStoryFile import US02,US05,us03_birth_b4_death,us04_marr_b4_divorce,userstory1,userstory8,us06_div_b4_death,us07_age_lessthan_150,US15,US18
 from parserLogic import file_reading_gen
 
 class TestContainer(unittest.TestCase):
         
     
-    #-------------------Aishwarya's Tetst Case Section Start--------------------#
+    #-------------------Aishwarya's Test Case Section Start--------------------#
 
     def test_US02(self):
         #all values of birthdays and death days given
@@ -49,6 +49,7 @@ class TestContainer(unittest.TestCase):
 
         
     def test_US05(self):
+        
         #all values of birthdays and death days given
         si1={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
         sf1={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
@@ -81,6 +82,46 @@ class TestContainer(unittest.TestCase):
             print("\n\n Death before marriage\n")
             #death before marriage
             self.assertEqual(US05(si6,sf6),"True")
+
+
+    def test_US15(self):
+        #no children
+        si1={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        sf1={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {}}}
+        
+        #greater than 15 children
+        si2={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        sf2={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I8@',2: '@I9@',3: '@I10@',4: '@I11@',5: '@I12@',6: '@I13@',7: '@I14@',8: '@I15@',9: '@I16@',10: '@I17@',11: '@I7@',12: '@I18@',13: '@I19@',14: '@I20@',15: '@I21@',16: '@I22@'}}}
+        
+        for i in range(1):
+            print("\n\n No children \n")
+            #no children
+            self.assertEqual(US15(si1,sf1),"True")
+
+            print("\n\n Greater than 15 children\n")
+            #greater than 15 children
+            self.assertEqual(US15(si2,sf2),"True")
+
+    def test_US18(self):
+        #no children
+        si1={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        sf1={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {}}}
+        
+        #siblings are married
+        si2={'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        sf2={'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I1@',2: '@I2@',}}}
+        
+        for i in range(1):
+            print("\n\n No children \n")
+            #no children
+            self.assertEqual(US18(si1,sf1),"True")
+
+            print("\n\n siblings are married\n")
+            #greater than 15 children
+            self.assertEqual(US18(si2,sf2),"True")
+
+    
+
 
     #-------------------Aishwarya's Tetst Case Section End--------------------#
 
