@@ -232,7 +232,47 @@ def US05(i,f):
     #print(y1)
     return "True"
 
+#sprint 2
+#userstory 15
+def US15(i,f):
+    res=[]
+    key=[]
+    c=0
+    for y in f.keys():
+        key.append(y[1:-1])
+    for x in f.values():
+        if(len(x["Children"]) >= 15):
+            res.append("False")
+            print("ERROR: Family: US15:  Family "+ key[c] +" has greater than or equal to 15 siblings")
+        else:
+            res.append("True")
+        # print(key[c])
+        c=c+1
+    # print(len(res))
+    return "True"
 
+def US18(i,f):
+    res=[]
+    fkey=[]
+    c=0
+    for y in f.keys():
+        fkey.append(y[1:-1])
+    for x in f.values():
+        child=[]
+        hid=x["Husband Id"][1:-1]
+        wid=x["Wife Id"][1:-1]
+        for z in x["Children"].values():
+            child.append(z[1:-1])
+        if(hid in child or wid in child):
+            res.append("False")
+            print("ERROR: Family: US18 Family "+fkey[c]+" siblings are married")
+            
+        else:
+            res.append("True")
+        c=c+1
+
+
+    return "True"
 
 #Aishwarya's Section End
 
@@ -416,13 +456,11 @@ def userstory8(indiDetails,familyDetails):
 
 if __name__ == '__main__':
 
-
-    
     filename1="Family.ged"
     filename="Family2.ged"
     fam_details, ind_details = file_reading_gen(filename)
     formingPrettyTable(fam_details,ind_details)
-    # unittest.main(exit=False, verbosity=2)
+    unittest.main(exit=False, verbosity=2)
 
     #Calling User Stories
     print("\n\n\n")
@@ -432,3 +470,7 @@ if __name__ == '__main__':
     US05(ind_details,fam_details)
     userstory1(ind_details,fam_details)
     userstory8(ind_details,fam_details)
+  
+    #sprint2
+    US15(ind_details,fam_details)
+    US18(ind_details,fam_details)
