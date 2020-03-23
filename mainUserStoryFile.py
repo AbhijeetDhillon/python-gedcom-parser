@@ -267,21 +267,31 @@ def US18(i, f):
     res = []
     fkey = []
     c = 0
-    for y in f.keys():
+    ids = []
+    i = len(f)  # length of fam members
+    for x in f.values():
+        # 2d array of hid , wid
+        ids.append([x["Husband Id"][1:-1], x["Wife Id"][1:-1]])
+    for y in f.keys():  # key of family id
         fkey.append(y[1:-1])
     for x in f.values():
         child = []
-        hid = x["Husband Id"][1:-1]
-        wid = x["Wife Id"][1:-1]
+        # hid=x["Husband Id"][1:-1]
+        # wid=x["Wife Id"][1:-1]
         for z in x["Children"].values():
             child.append(z[1:-1])
-        if(hid in child or wid in child):
-            res.append("False")
-            print("ERROR: Family: US18 Family " +
-                  fkey[c]+" siblings are married")
 
-        else:
-            res.append("True")
+        for item in range(i):
+            hid = ids[item][0]
+            wid = ids[item][1]
+            # print(hid,wid)
+            if(hid in child and wid in child):
+                res.append("False")
+                print("ERROR: Family: US18 Family " +
+                      fkey[c]+" siblings are married")
+
+            else:
+                res.append("True")
         c = c+1
 
     return "True"
