@@ -296,6 +296,84 @@ def US18(i, f):
 
     return "True"
 
+
+def US22(i, f):
+    fid_arr = []
+    iid_arr = []
+    flagi = 0
+    flagf = 0
+
+    for x in i.keys():
+        iid_arr.append(x[1:-1])
+    for x in f.keys():
+        fid_arr.append(x[1:-1])
+
+    for i in range(len(iid_arr)):
+        for i1 in range(len(iid_arr)):
+            if i != i1:
+                if iid_arr[i] == iid_arr[i1]:
+                    # flagi = 1
+                    print("ERROR: Individual: US22 :" +
+                          iid_arr[i1] + " id is not unique")
+            # else:
+            #     print(iid_arr[i1])
+    for i in range(len(fid_arr)):
+        for i1 in range(len(fid_arr)):
+            if i != i1:
+                if fid_arr[i] == fid_arr[i1]:
+                    # flagf = 1
+                    print("ERROR: Family : US22 :" +
+                          fid_arr[i1] + " id is not unique")
+            # else:
+            #     print(fid_arr[i1])
+
+    # print(fid_arr)
+    # print(iid_arr)
+    return "True"
+
+
+def US25(i, f):
+    hname = []
+    wname = []
+    cname = []
+    fnames = []
+    fid_arr = []
+
+    for x in f.keys():
+        fid_arr.append(x[1:-1])
+
+    def getname(id):
+        for key, value in i.items():
+            if(id == key):
+                return value['Name']
+
+    for key, value in f.items():
+        hname.append(value['Husband Name'])
+    for key, value in f.items():
+        wname.append(value['Wife Name'])
+    for key, value in f.items():
+        chs = value['Children']
+        cids = []
+        for z in chs.values():
+            cids.append(getname(z))
+        cname.append(cids)
+
+    for x in range(len(f.items())):
+        lis = []
+        for i in cname[x]:
+            lis.append(i.split('/')[0])
+        lis.append(hname[x].split('/')[0])
+        lis.append(wname[x].split('/')[0])
+        # print(lis)
+
+        flag = 0
+        flag = len(set(lis)) == len(lis)
+        if(not flag):
+            print("ERROR: Family : US25 : " +
+                  fid_arr[x] + " doesn't have unique first names")
+    return "True"
+
+
 # Aishwarya's Section End
 
 
@@ -401,6 +479,42 @@ def us07_age_lessthan_150(indiDetails):
             print("ERROR: INDIVIDUAL: US07:",
                   key[1:-1], ": More than 150 years old - Birth date", value['Birthday'])
     return isAgeAbove150
+
+
+def us16_male_last_name(indiDetails, famDetails):
+    isLastNameDifferent = "False"
+    for key, value in famDetails.items():
+        lastName = value['Husband Name'].split('/')[-2].lower()
+        for i, cvalue in value["Children"].items():
+            childKey = cvalue[1:-1]
+            for ikey, ivalue in indiDetails.items():
+                if ikey[1:-1] == childKey and ivalue["Gender"] == 'M':
+                    cLastName = ivalue['Name'].split('/')[-2].lower()
+                    cLastName = cLastName.lower()
+                    if cLastName != lastName:
+                        isLastNameDifferent = "True"
+                        print("ERROR: FAMILY: US16:", key[1:-1], ": has MALE INDIVIDUAL", ikey[1:-1], "with a different last name",
+                              cLastName, "than FAMILY last name", lastName)
+
+    return isLastNameDifferent
+
+
+def us23_sameName_sameBirthDate(indiDetails):
+    isNameBirthSame = "False"
+    keyList = []
+    for key, value in indiDetails.items():
+        for nkey, nvalue in indiDetails.items():
+            if(value['Name'] == nvalue['Name'] and value['Birthday'] == nvalue['Birthday'] and key != nkey and key not in keyList and nkey):
+                isNameBirthSame = "True"
+                keyList.append(nkey)
+                print("EEROR: INDIVIDUAL: US23:",
+                      nkey[1:-1], "has same name and birthdate as", key[1:-1])
+
+        keyList.append(key)
+
+    return isNameBirthSame
+
+
 # Abhijeet's Section End
 
 
@@ -510,6 +624,7 @@ def userstory10(indiDetails, familyDetails):
     for key, value in indiDetails.items():
         if len(value['Birthday']) == 10 and value['FAMS'] != "NA" and value['FAMS'] != {}:
             for valueDet in value['FAMS'].values():
+                # print(valueDet)
                 bDate = datetime.datetime.strptime(
                     value['Birthday'], '%Y-%m-%d')
 
@@ -527,6 +642,55 @@ def userstory10(indiDetails, familyDetails):
     return marriageAfter14
 
 
+def userstory35(indiDetails):
+
+    recentBirth = "NA"
+    today = datetime.datetime.now()
+    minus30days = datetime.timedelta(days=30)
+    past30days = today-minus30days
+    today = datetime.datetime.strftime(today, '%Y-%m-%d')
+    past30days = datetime.datetime.strftime(past30days, '%Y-%m-%d')
+
+    for key, value in indiDetails.items():
+        if len(value['Birthday']) == 10 and value['Birthday'] != "NA":
+            bDate = datetime.datetime.strptime(value['Birthday'], '%Y-%m-%d')
+            bDate = datetime.datetime.strftime(bDate, '%Y-%m-%d')
+            # print(bDate)
+            if(bDate < today and bDate > past30days):
+                recentBirth = "TRUE"
+                print("INDIVIDUAL: US35:",
+                      key[1:-1], ":Birth of the people who were born in the last 30 days ")
+            else:
+                recentBirth = "FALSE"
+                # print("ERROR: INDIVIDUAL: US35:",
+                #       key[1:-1], ":Marriage is done before 14 ")
+
+    return recentBirth
+
+
+def userstory36(indiDetails):
+    recentDeath = "NA"
+    today = datetime.datetime.now()
+    minus30days = datetime.timedelta(days=30)
+    past30days = today-minus30days
+    today = datetime.datetime.strftime(today, '%Y-%m-%d')
+    past30days = datetime.datetime.strftime(past30days, '%Y-%m-%d')
+
+    for key, value in indiDetails.items():
+        if len(value['Death']) == 10 and value['Death'] != "NA":
+            dDate = datetime.datetime.strptime(value['Death'], '%Y-%m-%d')
+            dDate = datetime.datetime.strftime(dDate, '%Y-%m-%d')
+
+            if(dDate < today and dDate > past30days):
+                recentDeath = "TRUE"
+                print("INDIVIDUAL: US36:",
+                      key[1:-1], ":Death of the people who were died in the last 30 days ")
+            else:
+                recentDeath = "FALSE"
+
+    return recentDeath
+
+
 # Dinesh's Section End
 
 
@@ -535,7 +699,7 @@ def userstory10(indiDetails, familyDetails):
 if __name__ == '__main__':
 
     filename1 = "Family.ged"
-    filename = "New-Family.ged"
+    filename = "NewFamily.ged"
     fam_details, ind_details = file_reading_gen(filename)
     formingPrettyTable(fam_details, ind_details)
     # unittest.main(exit=False, verbosity=2)
@@ -556,3 +720,11 @@ if __name__ == '__main__':
     userstory10(ind_details, fam_details)
     us06_div_b4_death(ind_details, fam_details)
     us07_age_lessthan_150(ind_details)
+
+    # sprint3
+    us16_male_last_name(ind_details, fam_details)
+    us23_sameName_sameBirthDate(ind_details)
+    US22(ind_details, fam_details)
+    US25(ind_details, fam_details)
+    userstory35(ind_details)
+    userstory36(ind_details)

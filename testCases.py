@@ -1,6 +1,6 @@
 import unittest
 
-from mainUserStoryFile import US02, US05, us03_birth_b4_death, us04_marr_b4_divorce, userstory1, userstory8, us06_div_b4_death, us07_age_lessthan_150, userstory09, userstory10, US15, US18
+from mainUserStoryFile import US02, US05, us03_birth_b4_death, us04_marr_b4_divorce, userstory1, userstory8, us06_div_b4_death, us07_age_lessthan_150, userstory09, userstory10, US15, US18, us16_male_last_name, us23_sameName_sameBirthDate, US22, US25, userstory35, userstory36
 from parserLogic import file_reading_gen
 
 
@@ -137,6 +137,30 @@ class TestContainer(unittest.TestCase):
             # greater than 15 children
             self.assertEqual(US18(si2, sf2), "True")
 
+    def test_US22(self):
+
+        si1 = {'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}},
+               '@I1@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        sf1 = {'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@',
+                        'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+
+        for i in range(1):
+            print("\n\n Unique individual and family id \n")
+            # unique id
+            self.assertEqual(US22(si1, sf1), "True")
+
+    def test_US25(self):
+
+        si1 = {'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {}, 'FAMC': {}},
+               '@I2@': {'Name': 'Smit /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {}, 'FAMC': {}}}
+        sf1 = {'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@',
+                        'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Smit /Nawar/', 'Children': {}}}
+
+        for i in range(1):
+            print("\n\n Unique first names in family \n")
+            # unique id
+            self.assertEqual(US25(si1, sf1), "True")
+
     #-------------------Aishwarya's Tetst Case Section End--------------------#
 
     #-------------------Abhijeet's Tetst Case Section Start--------------------#
@@ -222,6 +246,31 @@ class TestContainer(unittest.TestCase):
         self.assertEqual(us07_age_lessthan_150(si1), "True")
         self.assertEqual(us07_age_lessthan_150(si2), "False")
 
+    def test_us16_male_last_name(self):
+
+        si1 = {'@I4@': {'Name': 'Jack /Panchal/', 'Gender': 'M', 'Birthday': '1900-01-01',
+                        'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I5@'}}}
+        sf1 = {'@F1@': {'Married': '1990-06-15', 'Divorced': '2300-06-15', 'Husband Id': '@I1@',
+                        'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+
+        si2 = {'@I4@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1900-01-01',
+                        'Death': '2002-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I5@'}}}
+        sf2 = {'@F1@': {'Married': '1990-06-15', 'Divorced': '2001-06-15', 'Husband Id': '@I1@',
+                        'Husband Name': 'Pappu /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+
+        self.assertEqual(us16_male_last_name(si1, sf1), "True")
+        self.assertEqual(us16_male_last_name(si2, sf2), "False")
+
+    def test_us23_sameName_sameBirthDate(self):
+
+        si1 = {'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1800-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}},
+               '@I2@': {'Name': 'Smit /Nawar/', 'Gender': 'F', 'Birthday': '1800-01-01', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        si2 = {'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}},
+               '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+
+        self.assertEqual(us23_sameName_sameBirthDate(si1), "True")
+        self.assertEqual(us23_sameName_sameBirthDate(si2), "False")
+
     #-------------------Abhijeet's Tetst Case Section End--------------------#
 
     #-------------------Dinessh's Tetst Case Section Start--------------------#
@@ -296,15 +345,30 @@ class TestContainer(unittest.TestCase):
         sf1 = {'@F1@': {'Married': '1970-06-15', 'Divorced': 'NA', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/',
                         'Wife Id': '@I3@', 'Wife Name': 'Payal /Nawar/', 'Children': {1: '@I4@', 2: '@I5@'}}}
 
-        # si2 = {'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': 'NA', 'FAMS': {1: '@F1@', 2: '@F2@'}, 'FAMC': 'NA'}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F2@'},
-        #                                                                                                                                                         'FAMC': 'NA'}, '@I3@': {'Name': 'Payal /Nawar/', 'Gender': 'F', 'Birthday': '1975-04-03', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': 'NA'}, '@I4@': {'Name': 'Rani /Nawar/', 'Gender': 'F', 'Birthday': '1994-11-10', 'Death': 'NA', 'FAMS': {1: '@F3@'}, 'FAMC': '@F1@'}}
-        # sf2 = {'@F1@': {'Married': '1960-06-15', 'Divorced': 'NA', 'Husband Id': '@I1@', 'Husband Name': 'Smit /Nawar/',
-        #                 'Wife Id': '@I3@', 'Wife Name': 'Payal /Nawar/', 'Children': {1: '@I4@', 2: '@I5@'}}}
-
         print("\n\n Marriage After 14")
         self.assertEqual(userstory10(si1, sf1), "TRUE")
-        # print("\n\n Marriage After 14")
-        # self.assertEqual(userstory10(si2, sf2), "TRUE")
+
+    def test_userstory35(self):
+
+        si1 = {'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-03-010', 'Death': 'NA', 'FAMS': {1: '@F1@', 2: '@F2@'}, 'FAMC': 'NA'}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F2@'},
+                                                                                                                                                                 'FAMC': 'NA'}, '@I3@': {'Name': 'Payal /Nawar/', 'Gender': 'F', 'Birthday': '1975-04-03', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': 'NA'}, '@I4@': {'Name': 'Rani /Nawar/', 'Gender': 'F', 'Birthday': '1994-11-10', 'Death': 'NA', 'FAMS': {1: '@F3@'}, 'FAMC': '@F1@'}}
+        si2 = {'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-05-05', 'Death': 'NA', 'FAMS': {1: '@F1@', 2: '@F2@'}, 'FAMC': 'NA'}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F2@'},
+                                                                                                                                                                'FAMC': 'NA'}, '@I3@': {'Name': 'Payal /Nawar/', 'Gender': 'F', 'Birthday': '1975-04-03', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': 'NA'}, '@I4@': {'Name': 'Rani /Nawar/', 'Gender': 'F', 'Birthday': '1994-11-10', 'Death': 'NA', 'FAMS': {1: '@F3@'}, 'FAMC': '@F1@'}}
+
+        print("\n\n Recent Birthdates")
+        self.assertEqual(userstory35(si1), "TRUE")
+        self.assertEqual(userstory35(si2), "FALSE")
+
+    def test_userstory36(self):
+
+        si1 = {'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-03-010', 'Death': 'NA', 'FAMS': {1: '@F1@', 2: '@F2@'}, 'FAMC': 'NA'}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F2@'},
+                                                                                                                                                                 'FAMC': 'NA'}, '@I3@': {'Name': 'Payal /Nawar/', 'Gender': 'F', 'Birthday': '1975-04-03', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': 'NA'}, '@I4@': {'Name': 'Rani /Nawar/', 'Gender': 'F', 'Birthday': '1994-11-10', 'Death': 'NA', 'FAMS': {1: '@F3@'}, 'FAMC': '@F1@'}}
+        si2 = {'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-05-05', 'Death': 'NA', 'FAMS': {1: '@F1@', 2: '@F2@'}, 'FAMC': 'NA'}, '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F2@'},
+                                                                                                                                                                'FAMC': 'NA'}, '@I3@': {'Name': 'Payal /Nawar/', 'Gender': 'F', 'Birthday': '1975-04-03', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': 'NA'}, '@I4@': {'Name': 'Rani /Nawar/', 'Gender': 'F', 'Birthday': '1994-11-10', 'Death': 'NA', 'FAMS': {1: '@F3@'}, 'FAMC': '@F1@'}}
+
+        print("\n\n Recent Birthdates")
+        self.assertEqual(userstory36(si1), "TRUE")
+        self.assertEqual(userstory36(si2), "FALSE")
 
 
     #-------------------Dinesh's Tetst Case Section End--------------------#
