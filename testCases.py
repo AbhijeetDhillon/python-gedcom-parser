@@ -1,10 +1,11 @@
 import unittest
 
-from mainUserStoryFile import US02, US05, us03_birth_b4_death, us04_marr_b4_divorce, userstory1, userstory8, us06_div_b4_death, us07_age_lessthan_150, userstory09, userstory10, US15, US18,us16_male_last_name,us23_sameName_sameBirthDate
+from mainUserStoryFile import US02, US05, us03_birth_b4_death, us04_marr_b4_divorce, userstory1, userstory8, us06_div_b4_death, us07_age_lessthan_150, userstory09, userstory10, US15, US18,us16_male_last_name,us23_sameName_sameBirthDate,us24_uniqueFamily_bySpouses,us28_sibilings_byAge
 from parserLogic import file_reading_gen
 
 
 class TestContainer(unittest.TestCase):
+
 
     #-------------------Aishwarya's Test Case Section Start--------------------#
 
@@ -244,6 +245,32 @@ class TestContainer(unittest.TestCase):
 
         self.assertEqual(us23_sameName_sameBirthDate(si1), "True")
         self.assertEqual(us23_sameName_sameBirthDate(si2), "False")
+
+    def test_us24_uniqueFamily_bySpouses(self):
+
+           sf1 = {'@F1@': {'Married': '1990-06-15', 'Divorced': '2001-06-15', 'Husband Id': '@I1@',
+                        'Husband Name': 'Pappu /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}},
+                  '@F2@': {'Married': '1990-06-15', 'Divorced': '2009-06-15', 'Husband Id': '@I8@',
+                        'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Hi Xie /Nawar/', 'Children': {1: '@I8@'}}}
+
+           sf2 = {'@F1@': {'Married': '1990-06-15', 'Divorced': '2001-06-15', 'Husband Id': '@I1@',
+                        'Husband Name': 'Pappu /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}},
+                  '@F2@': {'Married': '1990-06-15', 'Divorced': '2009-06-15', 'Husband Id': '@I8@',
+                        'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I8@'}}}
+
+           self.assertEqual(us24_uniqueFamily_bySpouses(sf1), "False")
+           self.assertEqual(us24_uniqueFamily_bySpouses(sf2), "True")
+
+    def test_us28_sibilings_byAge(self):
+
+           si1 = {'@I4@': {'Name': 'Smitesh /Nawar/', 'Gender': 'M', 'Birthday': '1900-01-01', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}},
+               '@I5@': {'Name': 'Yi Xieyesh /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}},
+               '@I6@': {'Name': 'Yiyesh /Nawar/', 'Gender': 'M', 'Birthday': '1970-08-04', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}},
+               '@I7@': {'Name': 'YiXie /Nawar/', 'Gender': 'F', 'Birthday': '1975-08-04', 'Death': 'NA', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+           sf1 = {'@F1@': {'Married': '1990-06-15', 'Divorced': '2300-06-15', 'Husband Id': '@I1@',
+                        'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@', 2: '@I5@', 3: '@I6@', 4: '@I7@'}}}
+
+           self.assertEquals(us28_sibilings_byAge(si1,sf1), "Ordered")
 
 
     #-------------------Abhijeet's Tetst Case Section End--------------------#
