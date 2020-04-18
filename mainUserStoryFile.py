@@ -516,42 +516,48 @@ def us23_sameName_sameBirthDate(indiDetails):
 
     return isNameBirthSame
 
+
 def us24_uniqueFamily_bySpouses(famDetails):
-    isSpouseDetailsSame  = "False"
+    isSpouseDetailsSame = "False"
     keyList = []
     for key, value in famDetails.items():
         for nkey, nvalue in famDetails.items():
             if(value['Wife Name'] == nvalue['Wife Name'] and value['Married'] == nvalue['Married'] and key != nkey and key not in keyList):
                 isSpouseDetailsSame = "True"
                 keyList.append(nkey)
-                print("EEROR: FAMILY: US24: Family ", nkey[1:-1], "has same name(",value['Wife Name'],") and marriage date(",value['Married'],") of the spouse as Family",key[1:-1])
-            
-        keyList.append(key)        
+                print("EEROR: FAMILY: US24: Family ", nkey[1:-1], "has same name(", value['Wife Name'],
+                      ") and marriage date(", value['Married'], ") of the spouse as Family", key[1:-1])
+
+        keyList.append(key)
 
     return isSpouseDetailsSame
+
 
 def us28_sibilings_byAge(indiDetails, famDetails):
     ordelist = ""
     orderDict = PrettyTable()
-    orderDict.field_names = ["Family ID", "Individual Id", "Name", "Birthdate","Age"]
-    siblingDetails ={}
+    orderDict.field_names = ["Family ID",
+                             "Individual Id", "Name", "Birthdate", "Age"]
+    siblingDetails = {}
     today = datetime.datetime.now()
     today = datetime.datetime.strftime(today, '%Y-%m-%d')
     for key, value in famDetails.items():
-        for i,cvalue in value["Children"].items():
+        for i, cvalue in value["Children"].items():
             childKey = cvalue[1:-1]
             for ikey, ivalue in indiDetails.items():
                 if ikey[1:-1] == childKey:
-                    siblingDetails[ikey[1:-1]] ={}
-                    siblingDetails[ikey[1:-1]]['Birthday']=ivalue['Birthday']
-                    siblingDetails[ikey[1:-1]]['Name']=ivalue['Name']
-                    siblingDetails[ikey[1:-1]]['Age']=abs((datetime.datetime.strptime(today, '%Y-%m-%d') - datetime.datetime.strptime(ivalue['Birthday'], '%Y-%m-%d')).days)//365
+                    siblingDetails[ikey[1:-1]] = {}
+                    siblingDetails[ikey[1:-1]]['Birthday'] = ivalue['Birthday']
+                    siblingDetails[ikey[1:-1]]['Name'] = ivalue['Name']
+                    siblingDetails[ikey[1:-1]]['Age'] = abs((datetime.datetime.strptime(
+                        today, '%Y-%m-%d') - datetime.datetime.strptime(ivalue['Birthday'], '%Y-%m-%d')).days)//365
 
-        
-        sorted_keys = OrderedDict(sorted(siblingDetails.items(), key = lambda x: getitem(x[1], 'Age'),reverse=True))          
+        sorted_keys = OrderedDict(sorted(siblingDetails.items(
+        ), key=lambda x: getitem(x[1], 'Age'), reverse=True))
         for skey, svalue in sorted_keys.items():
-            orderDict.add_row([key[1:-1],skey,svalue['Name'],svalue['Birthday'],svalue['Age']])
-    
+            orderDict.add_row([key[1:-1], skey, svalue['Name'],
+                               svalue['Birthday'], svalue['Age']])
+
     print(orderDict)
     ordelist = "Ordered"
     return ordelist
@@ -732,6 +738,53 @@ def userstory36(indiDetails):
     return recentDeath
 
 
+def userstory38(indiDetails):
+
+    upcomingBirth = "NA"
+    today = datetime.datetime.now()
+    minus30days = datetime.timedelta(days=30)
+    plus30days = today+minus30days
+    today = datetime.datetime.strftime(today, '%m-%d')
+    plus30days = datetime.datetime.strftime(plus30days, '%m-%d')
+
+    for key, value in indiDetails.items():
+        if len(value['Birthday']) == 10 and value['Birthday'] != "NA" and value['Death'] == "NA":
+            bDate = datetime.datetime.strptime(value['Birthday'], '%Y-%m-%d')
+            bDate = datetime.datetime.strftime(bDate, '%m-%d')
+            if(bDate > today and bDate < plus30days):
+                upcomingBirth = "TRUE"
+                print("INDIVIDUAL: US38:",
+                      key[1:-1], ":Birthdate ", bDate, "of the people in the upcoming 30 days ")
+            else:
+                upcomingBirth = "FALSE"
+
+    return upcomingBirth
+
+
+def userstory39(familyDetails):
+    upcomingMarriage = "NA"
+    today = datetime.datetime.now()
+    minus30days = datetime.timedelta(days=30)
+    plus30days = today+minus30days
+    today = datetime.datetime.strftime(today, '%m-%d')
+    plus30days = datetime.datetime.strftime(plus30days, '%m-%d')
+    # print(today, "\n\n\n\n", plus30days)
+
+    for key, value in familyDetails.items():
+        if len(value['Married']) == 10 and value['Married'] != "NA":
+            mDate = datetime.datetime.strptime(value['Married'], '%Y-%m-%d')
+            mDate = datetime.datetime.strftime(mDate, '%m-%d')
+            # print(mDate)
+            if(mDate > today and mDate < plus30days):
+                upcomingMarriage = "TRUE"
+                print("FAMILY: US39:",
+                      key[1:-1], ":marriage Date ", mDate, "of the people in the upcoming 30 days ")
+            else:
+                upcomingMarriage = "FALSE"
+
+    return upcomingMarriage
+
+
 # Dinesh's Section End
 
 
@@ -769,7 +822,9 @@ if __name__ == '__main__':
     US25(ind_details, fam_details)
     userstory35(ind_details)
     userstory36(ind_details)
-    
+
     # sprint4
-    us24_uniqueFamily_bySpouses(famDetails)
-    us28_sibilings_byAge(indiDetails, famDetails)
+    us24_uniqueFamily_bySpouses(fam_details)
+    # us28_sibilings_byAge(ind_details, fam_details)
+    userstory38(ind_details)
+    userstory39(fam_details)
