@@ -506,7 +506,7 @@ def us23_sameName_sameBirthDate(indiDetails):
     keyList = []
     for key, value in indiDetails.items():
         for nkey, nvalue in indiDetails.items():
-            if(value['Name'] == nvalue['Name'] and value['Birthday'] == nvalue['Birthday'] and key != nkey and key not in keyList and nkey):
+            if(value['Name'] == nvalue['Name'] and value['Birthday'] == nvalue['Birthday'] and value['Birthday'] !="NA" and nvalue['Birthday'] !="NA" and key != nkey and key not in keyList and nkey):
                 isNameBirthSame = "True"
                 keyList.append(nkey)
                 print("EEROR: INDIVIDUAL: US23:",
@@ -522,7 +522,7 @@ def us24_uniqueFamily_bySpouses(famDetails):
     keyList = []
     for key, value in famDetails.items():
         for nkey, nvalue in famDetails.items():
-            if(value['Wife Name'] == nvalue['Wife Name'] and value['Married'] == nvalue['Married'] and key != nkey and key not in keyList):
+            if(value['Wife Name'] == nvalue['Wife Name'] and value['Married'] == nvalue['Married'] and value['Married'] !="NA" and nvalue['Married'] !="NA" and key != nkey and key not in keyList):
                 isSpouseDetailsSame = "True"
                 keyList.append(nkey)
                 print("EEROR: FAMILY: US24: Family ", nkey[1:-1], "has same name(", value['Wife Name'],
@@ -534,7 +534,6 @@ def us24_uniqueFamily_bySpouses(famDetails):
 
 
 def us28_sibilings_byAge(indiDetails, famDetails):
-    ordelist = ""
     orderDict = PrettyTable()
     orderDict.field_names = ["Family ID",
                              "Individual Id", "Name", "Birthdate", "Age"]
@@ -545,7 +544,7 @@ def us28_sibilings_byAge(indiDetails, famDetails):
         for i, cvalue in value["Children"].items():
             childKey = cvalue[1:-1]
             for ikey, ivalue in indiDetails.items():
-                if ikey[1:-1] == childKey:
+                if (ikey[1:-1] == childKey and ivalue['Birthday'] != "NA"):
                     siblingDetails[ikey[1:-1]] = {}
                     siblingDetails[ikey[1:-1]]['Birthday'] = ivalue['Birthday']
                     siblingDetails[ikey[1:-1]]['Name'] = ivalue['Name']
@@ -555,12 +554,9 @@ def us28_sibilings_byAge(indiDetails, famDetails):
         sorted_keys = OrderedDict(sorted(siblingDetails.items(
         ), key=lambda x: getitem(x[1], 'Age'), reverse=True))
         for skey, svalue in sorted_keys.items():
-            orderDict.add_row([key[1:-1], skey, svalue['Name'],
-                               svalue['Birthday'], svalue['Age']])
-
-    print(orderDict)
-    ordelist = "Ordered"
-    return ordelist
+            orderDict.add_row([key[1:-1], skey, svalue['Name'],svalue['Birthday'], svalue['Age']])
+    print("\n",orderDict)
+    return sorted_keys
 
 # Abhijeet's Section End
 

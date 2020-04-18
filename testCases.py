@@ -2,7 +2,7 @@ import unittest
 
 from mainUserStoryFile import US02, US05, us03_birth_b4_death, us04_marr_b4_divorce, userstory1, userstory8, us06_div_b4_death, us07_age_lessthan_150, userstory09, userstory10, US15, US18, us16_male_last_name, us23_sameName_sameBirthDate, US22, US25, userstory35, userstory36, us24_uniqueFamily_bySpouses, us28_sibilings_byAge, userstory38, userstory39
 from parserLogic import file_reading_gen
-
+from collections import OrderedDict
 
 class TestContainer(unittest.TestCase):
 
@@ -295,7 +295,8 @@ class TestContainer(unittest.TestCase):
         sf1 = {'@F1@': {'Married': '1990-06-15', 'Divorced': '2300-06-15', 'Husband Id': '@I1@',
                         'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@', 2: '@I5@', 3: '@I6@', 4: '@I7@'}}}
 
-        self.assertEquals(us28_sibilings_byAge(si1, sf1), "Ordered")
+        result = OrderedDict([('I4', {'Birthday': '1900-01-01', 'Name': 'Smitesh /Nawar/', 'Age': 120}), ('I6', {'Birthday': '1970-08-04', 'Name': 'Yiyesh /Nawar/', 'Age': 49}), ('I7', {'Birthday': '1975-08-04', 'Name': 'YiXie /Nawar/', 'Age': 44}), ('I5', {'Birthday': '1978-08-04', 'Name': 'Yi Xieyesh /Nawar/', 'Age': 41})])
+        self.assertEquals(us28_sibilings_byAge(si1, sf1), result)
 
     #-------------------Abhijeet's Tetst Case Section End--------------------#
 
