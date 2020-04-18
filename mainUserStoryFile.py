@@ -514,6 +514,45 @@ def us23_sameName_sameBirthDate(indiDetails):
 
     return isNameBirthSame
 
+def us24_uniqueFamily_bySpouses(famDetails):
+    isSpouseDetailsSame  = "False"
+    keyList = []
+    for key, value in famDetails.items():
+        for nkey, nvalue in famDetails.items():
+            if(value['Wife Name'] == nvalue['Wife Name'] and value['Married'] == nvalue['Married'] and key != nkey and key not in keyList):
+                isSpouseDetailsSame = "True"
+                keyList.append(nkey)
+                print("EEROR: FAMILY: US24: Family ", nkey[1:-1], "has same name(",value['Wife Name'],") and marriage date(",value['Married'],") of the spouse as Family",key[1:-1])
+            
+        keyList.append(key)        
+
+    return isSpouseDetailsSame
+
+def us28_sibilings_byAge(indiDetails, famDetails):
+    ordelist = ""
+    orderDict = PrettyTable()
+    orderDict.field_names = ["Family ID", "Individual Id", "Name", "Birthdate","Age"]
+    siblingDetails ={}
+    today = datetime.datetime.now()
+    today = datetime.datetime.strftime(today, '%Y-%m-%d')
+    for key, value in famDetails.items():
+        for i,cvalue in value["Children"].items():
+            childKey = cvalue[1:-1]
+            for ikey, ivalue in indiDetails.items():
+                if ikey[1:-1] == childKey:
+                    siblingDetails[ikey[1:-1]] ={}
+                    siblingDetails[ikey[1:-1]]['Birthday']=ivalue['Birthday']
+                    siblingDetails[ikey[1:-1]]['Name']=ivalue['Name']
+                    siblingDetails[ikey[1:-1]]['Age']=abs((datetime.datetime.strptime(today, '%Y-%m-%d') - datetime.datetime.strptime(ivalue['Birthday'], '%Y-%m-%d')).days)//365
+
+        
+        sorted_keys = OrderedDict(sorted(siblingDetails.items(), key = lambda x: getitem(x[1], 'Age'),reverse=True))          
+        for skey, svalue in sorted_keys.items():
+            orderDict.add_row([key[1:-1],skey,svalue['Name'],svalue['Birthday'],svalue['Age']])
+    
+    print(orderDict)
+    ordelist = "Ordered"
+    return ordelist
 
 # Abhijeet's Section End
 
@@ -728,3 +767,7 @@ if __name__ == '__main__':
     US25(ind_details, fam_details)
     userstory35(ind_details)
     userstory36(ind_details)
+    
+    # sprint4
+    us24_uniqueFamily_bySpouses(famDetails)
+    us28_sibilings_byAge(indiDetails, famDetails)
