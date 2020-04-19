@@ -1,8 +1,8 @@
 import unittest
 
-from mainUserStoryFile import US02, US05, us03_birth_b4_death, us04_marr_b4_divorce, userstory1, userstory8, us06_div_b4_death, us07_age_lessthan_150, userstory09, userstory10, US15, US18, us16_male_last_name, us23_sameName_sameBirthDate, US22, US25, userstory35, userstory36, us24_uniqueFamily_bySpouses, us28_sibilings_byAge, userstory38, userstory39
+from mainUserStoryFile import US02, US05, us03_birth_b4_death, us04_marr_b4_divorce, userstory1, userstory8, us06_div_b4_death, us07_age_lessthan_150, userstory09, userstory10, US15, US18, us16_male_last_name, us23_sameName_sameBirthDate, US22, US25, userstory35, userstory36, us24_uniqueFamily_bySpouses, us28_sibilings_byAge, userstory38, userstory39,US33,US42
 from parserLogic import file_reading_gen
-from collections import OrderedDict
+
 
 class TestContainer(unittest.TestCase):
 
@@ -161,6 +161,31 @@ class TestContainer(unittest.TestCase):
             # unique id
             self.assertEqual(US25(si1, sf1), "True")
 
+    def test_US33(self):
+
+        si1 = {'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '1966-01-01', 'Death': '2000-08-01', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@F7@'}},
+               '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-08-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@F6@'}},
+               '@I4@': {'Name': 'Happy /Smit/', 'Gender': 'F', 'Birthday': '2015-08-04', 'Death': 'NA', 'FAMS': {1: '@F5@'}, 'FAMC': {1: '@F1@'}},
+               }
+        sf1 = {'@F1@': {'Married': '1990-06-15', 'Divorced': '1998-06-15', 'Husband Id': '@I1@',
+                        'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+       
+        for i in range(1):
+            print("\n\n Orphaned children \n")
+            self.assertEqual(US33(si1, sf1), "True")
+
+    def test_US42(self):
+
+       # illegitimate dates
+        si1 = {'@I1@': {'Name': 'Smit /Nawar/', 'Gender': 'M', 'Birthday': '2045-01-01', 'Death': '2000-08-322', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}},
+               '@I2@': {'Name': 'Yi Xie /Nawar/', 'Gender': 'F', 'Birthday': '1978-33-04', 'Death': '2000-08-05', 'FAMS': {1: '@F1@'}, 'FAMC': {1: '@I4@'}}}
+        sf1 = {'@F1@': {'Married': '1990-06-0', 'Divorced': '1998-06-153', 'Husband Id': '@I1@',
+                        'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@'}}}
+   
+        for i in range(1):
+            print("\n\n Reject illegitimate dates \n")
+            self.assertEqual(US42(si1, sf1), "True")
+
     #-------------------Aishwarya's Tetst Case Section End--------------------#
 
     #-------------------Abhijeet's Tetst Case Section Start--------------------#
@@ -295,8 +320,7 @@ class TestContainer(unittest.TestCase):
         sf1 = {'@F1@': {'Married': '1990-06-15', 'Divorced': '2300-06-15', 'Husband Id': '@I1@',
                         'Husband Name': 'Smit /Nawar/', 'Wife Id': '@I2@', 'Wife Name': 'Yi Xie /Nawar/', 'Children': {1: '@I4@', 2: '@I5@', 3: '@I6@', 4: '@I7@'}}}
 
-        result = OrderedDict([('I4', {'Birthday': '1900-01-01', 'Name': 'Smitesh /Nawar/', 'Age': 120}), ('I6', {'Birthday': '1970-08-04', 'Name': 'Yiyesh /Nawar/', 'Age': 49}), ('I7', {'Birthday': '1975-08-04', 'Name': 'YiXie /Nawar/', 'Age': 44}), ('I5', {'Birthday': '1978-08-04', 'Name': 'Yi Xieyesh /Nawar/', 'Age': 41})])
-        self.assertEquals(us28_sibilings_byAge(si1, sf1), result)
+        self.assertEquals(us28_sibilings_byAge(si1, sf1), "Ordered")
 
     #-------------------Abhijeet's Tetst Case Section End--------------------#
 
