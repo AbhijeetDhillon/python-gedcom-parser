@@ -376,6 +376,129 @@ def US25(i, f):
     return "True"
 
 
+def US42(i, f):
+    ind_bday = []
+    ind_dday = []
+    fam_mday = []
+    fam_dday = []
+
+    for k, v in i.items():
+        fib = 0
+        if(v['Birthday'] != "NA"):  # individual birthday dates
+            # id,birthday,year,month,date
+            ind_bday.append([k[1:-1], v['Birthday'], v['Birthday'].split('-')
+                             [0], v['Birthday'].split('-')[1], v['Birthday'].split('-')[2]])
+            if(int(v['Birthday'].split('-')[0]) > 0 and int(v['Birthday'].split('-')[0]) <= 2020):  # year checking
+                fib = fib+1
+            if(int(v['Birthday'].split('-')[1]) > 0 and int(v['Birthday'].split('-')[1]) <= 12):  # month
+                fib = fib+1
+            if(int(v['Birthday'].split('-')[2]) > 0 and int(v['Birthday'].split('-')[2]) <= 31):  # date
+                fib = fib+1
+
+            if(fib != 3):
+                print("ERROR: INDIVIDUAL: US42: " +
+                      k[1:-1]+" Birthday date is in illegitimate date format")
+                # print([k[1:-1],v['Birthday'],v['Birthday'].split('-')[0],v['Birthday'].split('-')[1],v['Birthday'].split('-')[2]])
+
+        fid = 0
+        if(v['Death'] != "NA"):  # individual death dates
+            # id,birthday,year,month,date
+            ind_dday.append([k[1:-1], v['Death'], v['Death'].split('-')
+                             [0], v['Death'].split('-')[1], v['Death'].split('-')[2]])
+            if(int(v['Death'].split('-')[0]) > 0 and int(v['Death'].split('-')[0]) <= 2020):  # year checking
+                fid = fid+1
+            if(int(v['Death'].split('-')[1]) > 0 and int(v['Death'].split('-')[1]) <= 12):  # month
+                fid = fid+1
+            if(int(v['Death'].split('-')[2]) > 0 and int(v['Death'].split('-')[2]) <= 31):  # date
+                fid = fid+1
+
+            if(fid != 3):
+                print("ERROR: INDIVIDUAL: US42: " +
+                      k[1:-1]+" Death date is in illegitimate date format")
+                # print([k[1:-1],v['Death'],v['Death'].split('-')[0],v['Death'].split('-')[1],v['Death'].split('-')[2]])
+
+    for k, v in f.items():
+        ffm = 0
+        if(v['Married'] != "NA"):  # family marriage date
+            # id,birthday,year,month,date
+            fam_mday.append([k[1:-1], v['Married'], v['Married'].split('-')
+                             [0], v['Married'].split('-')[1], v['Married'].split('-')[2]])
+            if(int(v['Married'].split('-')[0]) > 0 and int(v['Married'].split('-')[0]) <= 2020):  # year checking
+                ffm = ffm+1
+            if(int(v['Married'].split('-')[1]) > 0 and int(v['Married'].split('-')[1]) <= 12):  # month
+                ffm = ffm+1
+            if(int(v['Married'].split('-')[2]) > 0 and int(v['Married'].split('-')[2]) <= 31):  # date
+                ffm = ffm+1
+
+            if(ffm != 3):
+                print("ERROR: FAMILY: US42: " +
+                      k[1:-1]+" Marriage date is in illegitimate date format")
+                # print([k[1:-1],v['Married'],v['Married'].split('-')[0],v['Married'].split('-')[1],v['Married'].split('-')[2]])
+
+        ffd = 0
+        if(v['Divorced'] != "NA"):  # family divorce date
+            # id,birthday,year,month,date
+            fam_dday.append([k[1:-1], v['Divorced'], v['Divorced'].split('-')
+                             [0], v['Divorced'].split('-')[1], v['Divorced'].split('-')[2]])
+            if(int(v['Divorced'].split('-')[0]) > 0 and int(v['Divorced'].split('-')[0]) <= 2020):  # year checking
+                ffd = ffd+1
+            if(int(v['Divorced'].split('-')[1]) > 0 and int(v['Divorced'].split('-')[1]) <= 12):  # month
+                ffd = ffd+1
+            if(int(v['Divorced'].split('-')[2]) > 0 and int(v['Divorced'].split('-')[2]) <= 31):  # date
+                ffd = ffd+1
+
+            if(ffd != 3):
+                print("ERROR: FAMILY: US42: " +
+                      k[1:-1]+" Divorce date is in illegitimate date format")
+                # print([k[1:-1],v['Divorced'],v['Divorced'].split('-')[0],v['Divorced'].split('-')[1],v['Divorced'].split('-')[2]])
+
+    return "True"
+
+
+def US33(i, f):
+    ad = []
+    for k, v in i.items():
+        # print(v['Death'])
+        if(v['Death'] != "NA"):
+            ad.append("D")
+            # print("DEAD")
+        else:
+            ad.append("A")
+            # print("ALIVE")
+        # ad.append(v["Alive"])
+
+    for k, v in i.items():
+        hf = 0
+        wf = 0
+        fam = "F0"
+        if(v['Birthday'] != "NA"):
+            if(calcAge(v['Birthday']) < 18 and calcAge(v['Birthday']) > 0):
+                # print(v['FAMC'][1:-1])
+                # if(len(v['FAMC']) > 0):
+                if(v['FAMC'] != "NA"):
+                    # fam = v['FAMC']
+                    fam = str(v['FAMC'])
+                    fam = fam.split("@")[1]
+                else:
+                    fam = "NA"
+                # print(fam)
+                for kf, vf in f.items():
+                    if(fam == kf[1:-1]):
+                        #   print(fam,vf['Husband Id'][2:-1],vf['Wife Id'][2:-1])
+                        hid = int(vf['Husband Id'][2:-1])-1
+                        wid = int(vf['Wife Id'][2:-1])-1
+                    #   print(hid,wid)
+                        if(ad[hid] == 'D'):
+                            hf = 1
+                        if(ad[wid] == 'D'):
+                            wf = 1
+                        # print(hf,wf)
+                        if(hf == 1 and wf == 1):
+                            print("ERROR: INDIVIDUAL: US33: " +
+                                  k[1:-1]+" is an orphaned child")
+                    # fid.append([fam,vf['Husband Id'][1:-1],vf['Wife Id'][1:-1]])
+    return "True"
+
 # Aishwarya's Section End
 
 
@@ -506,7 +629,7 @@ def us23_sameName_sameBirthDate(indiDetails):
     keyList = []
     for key, value in indiDetails.items():
         for nkey, nvalue in indiDetails.items():
-            if(value['Name'] == nvalue['Name'] and value['Birthday'] == nvalue['Birthday'] and value['Birthday'] !="NA" and nvalue['Birthday'] !="NA" and key != nkey and key not in keyList and nkey):
+            if(value['Name'] == nvalue['Name'] and value['Birthday'] == nvalue['Birthday'] and key != nkey and key not in keyList and nkey):
                 isNameBirthSame = "True"
                 keyList.append(nkey)
                 print("EEROR: INDIVIDUAL: US23:",
@@ -522,7 +645,7 @@ def us24_uniqueFamily_bySpouses(famDetails):
     keyList = []
     for key, value in famDetails.items():
         for nkey, nvalue in famDetails.items():
-            if(value['Wife Name'] == nvalue['Wife Name'] and value['Married'] == nvalue['Married'] and value['Married'] !="NA" and nvalue['Married'] !="NA" and key != nkey and key not in keyList):
+            if(value['Wife Name'] == nvalue['Wife Name'] and value['Married'] == nvalue['Married'] and key != nkey and key not in keyList):
                 isSpouseDetailsSame = "True"
                 keyList.append(nkey)
                 print("EEROR: FAMILY: US24: Family ", nkey[1:-1], "has same name(", value['Wife Name'],
@@ -554,8 +677,9 @@ def us28_sibilings_byAge(indiDetails, famDetails):
         sorted_keys = OrderedDict(sorted(siblingDetails.items(
         ), key=lambda x: getitem(x[1], 'Age'), reverse=True))
         for skey, svalue in sorted_keys.items():
-            orderDict.add_row([key[1:-1], skey, svalue['Name'],svalue['Birthday'], svalue['Age']])
-    print("\n",orderDict)
+            orderDict.add_row([key[1:-1], skey, svalue['Name'],
+                               svalue['Birthday'], svalue['Age']])
+    print("\n", orderDict)
     return sorted_keys
 
 # Abhijeet's Section End
@@ -701,7 +825,7 @@ def userstory35(indiDetails):
             # print(bDate)
             if(bDate < today and bDate > past30days):
                 recentBirth = "TRUE"
-                print("INDIVIDUAL: US35:",
+                print("ERROR: INDIVIDUAL: US35:",
                       key[1:-1], ":Birth of the people who were born in the last 30 days ")
             else:
                 recentBirth = "FALSE"
@@ -726,7 +850,7 @@ def userstory36(indiDetails):
 
             if(dDate < today and dDate > past30days):
                 recentDeath = "TRUE"
-                print("INDIVIDUAL: US36:",
+                print("ERROR: INDIVIDUAL: US36:",
                       key[1:-1], ":Death of the people who were died in the last 30 days ")
             else:
                 recentDeath = "FALSE"
@@ -749,7 +873,7 @@ def userstory38(indiDetails):
             bDate = datetime.datetime.strftime(bDate, '%m-%d')
             if(bDate > today and bDate < plus30days):
                 upcomingBirth = "TRUE"
-                print("INDIVIDUAL: US38:",
+                print("ERROR: INDIVIDUAL: US38:",
                       key[1:-1], ":Birthdate ", bDate, "of the people in the upcoming 30 days ")
             else:
                 upcomingBirth = "FALSE"
@@ -773,7 +897,7 @@ def userstory39(familyDetails):
             # print(mDate)
             if(mDate > today and mDate < plus30days):
                 upcomingMarriage = "TRUE"
-                print("FAMILY: US39:",
+                print("ERROR: FAMILY: US39:",
                       key[1:-1], ":marriage Date ", mDate, "of the people in the upcoming 30 days ")
             else:
                 upcomingMarriage = "FALSE"
@@ -792,7 +916,6 @@ if __name__ == '__main__':
     filename = "NewFamily.ged"
     fam_details, ind_details = file_reading_gen(filename)
     formingPrettyTable(fam_details, ind_details)
-    # unittest.main(exit=False, verbosity=2)
 
     # Calling User Stories
     print("\n\n\n")
@@ -821,6 +944,9 @@ if __name__ == '__main__':
 
     # sprint4
     us24_uniqueFamily_bySpouses(fam_details)
-    # us28_sibilings_byAge(ind_details, fam_details)
+    print("User Story 28:")
+    us28_sibilings_byAge(ind_details, fam_details)
     userstory38(ind_details)
     userstory39(fam_details)
+    US42(ind_details, fam_details)
+    US33(ind_details, fam_details)
