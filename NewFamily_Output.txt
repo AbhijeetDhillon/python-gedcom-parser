@@ -1,60 +1,74 @@
- Individuals
-+-----+------------------+--------+------------+-----+-------+------------+--------+--------------+
-|  ID |       Name       | Gender |  Birthday  | Age | Alive |   Death    | Child  |    Spouse    |
-+-----+------------------+--------+------------+-----+-------+------------+--------+--------------+
-|  I1 | Hussain /Manto/  |   M    | 1948-08-04 |  71 |  True |     NA     |   NA   | {'F1', 'F2'} |
-|  I2 | Savitri /Manto/  |   F    | 1999-06-05 |  20 | False | 1985-07-13 |   NA   |    {'F2'}    |
-|  I3 |  Manju /Manto/   |   F    | 1990-11-10 |  29 |  True |     NA     | {'F2'} |    {'F3'}    |
-|  I4 |  Rizwan /Manto/  |   M    | 1987-05-09 |  32 |  True |     NA     | {'F2'} |    {'F4'}    |
-|  I5 |  Kavita /Manto/  |   F    | 2001-07-17 |  18 |  True |     NA     |   NA   |    {'F1'}    |
-|  I6 |  Billa /Manto/   |   M    | 1990-10-05 |  29 |  True |     NA     | {'F1'} |    {'F5'}    |
-|  I7 |  Rashmi /Manto/  |   F    | 1992-12-06 |  27 |  True |     NA     | {'F1'} |    {'F6'}    |
-|  I8 | Ramesh /Huliya/  |   M    | 1970-06-12 |  49 |  True |     NA     |   NA   |    {'F3'}    |
-|  I9 |  Ramya /Bhevri/  |   F    | 1985-07-07 |  34 |  True |     NA     |   NA   |    {'F4'}    |
-| I10 | Tulsi /Gaikwad/  |   F    | 1993-10-13 |  26 |  True |     NA     |   NA   |    {'F5'}    |
-| I11 |  Yogesh /Patel/  |   M    | 1988-07-05 |  31 |  True |     NA     |   NA   |    {'F6'}    |
-| I12 |   Sonu /Manto/   |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I13 |  Jinesh /Patel/  |   M    | 1800-01-01 | 220 |  True |     NA     | {'F6'} |      NA      |
-| I14 |  Trish /Huliya/  |        |     NA     |  NA |  True |     NA     | {'F3'} |      NA      |
-| I15 |  Nikhil /Manto/  |   F    | 2025-12-03 |  -6 |  True |     NA     | {'F4'} |      NA      |
-| I16 |   Raja /Manto/   |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I17 |   Sonu /Manto/   |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I18 |  Risha /Manto/   |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I19 |   Smit /Manto/   |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I20 |  Jenish /Manto/  |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I21 | Murthy /Jathiya/ |   M    |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I22 |  Sankar /Manto/  |   M    |     NA     |  NA |  True |     NA     | {'F5'} |    {'F7'}    |
-| I23 |  Subha /Manto/   |   F    |     NA     |  NA |  True |     NA     | {'F5'} |    {'F7'}    |
-| I24 |  Suguna /Manto/  |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I25 | Suganti /Manto/  |        | 2020-04-01 |  0  | False | 2020-04-03 | {'F5'} |      NA      |
-| I26 |  Vinaya /Manto/  |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I27 |  Ganesh /Manto/  |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I28 | Rajathi /Manto/  |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I29 |  Rehan /Manto/   |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-| I30 |  Janani /Manto/  |        |     NA     |  NA |  True |     NA     | {'F5'} |      NA      |
-+-----+------------------+--------+------------+-----+-------+------------+--------+--------------+
+Individuals
++-----+------------------+--------+------------+-----+-------+------------+---------+--------------+
+|  ID |       Name       | Gender |  Birthday  | Age | Alive |   Death    |  Child  |    Spouse    |
++-----+------------------+--------+------------+-----+-------+------------+---------+--------------+
+|  I1 | Hussain /Manto/  |   M    | 1948-08-04 |  71 |  True |     NA     |    NA   | {'F1', 'F2'} |
+|  I2 | Savitri /Manto/  |   F    | 1999-06-05 |  20 | False | 1985-07-13 |    NA   |    {'F2'}    |
+|  I3 |  Manju /Manto/   |   F    | 1990-11-10 |  29 |  True |     NA     |  {'F2'} |    {'F3'}    |
+|  I4 |  Rizwan /Manto/  |   M    | 1987-05-09 |  32 |  True |     NA     |  {'F2'} |    {'F4'}    |
+|  I5 |  Kavita /Manto/  |   F    | 2001-07-17 |  18 |  True |     NA     |    NA   |    {'F1'}    |
+|  I6 |  Billa /Manto/   |   M    | 1990-10-05 |  29 |  True |     NA     |  {'F1'} |    {'F5'}    |
+|  I7 |  Rashmi /Manto/  |   F    | 1992-12-06 |  27 |  True |     NA     |  {'F1'} |    {'F6'}    |
+|  I8 | Ramesh /Huliya/  |   M    | 1970-06-12 |  49 |  True |     NA     |    NA   |    {'F3'}    |
+|  I9 |  Ramya /Bhevri/  |   F    | 1985-07-07 |  34 |  True |     NA     |    NA   |    {'F4'}    |
+| I10 | Tulsi /Gaikwad/  |   F    | 1993-10-13 |  26 |  True |     NA     |    NA   |    {'F5'}    |
+| I11 |  Yogesh /Patel/  |   M    | 1988-07-05 |  31 |  True |     NA     |    NA   |    {'F6'}    |
+| I12 |   Sonu /Manto/   |   M    |     NA     |  NA |  True |     NA     |  {'F5'} |    {'F7'}    |
+| I13 |  Jinesh /Patel/  |   M    | 1800-01-01 | 220 | False | 2017-05-03 |  {'F6'} |    {'F8'}    |
+| I14 |  Trish /Huliya/  |        |     NA     |  NA |  True |     NA     |  {'F3'} |      NA      |
+| I15 |  Nikhil /Manto/  |   F    | 2025-12-03 |  -6 |  True |     NA     |  {'F4'} |      NA      |
+| I16 |   Raja /Manto/   |        |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I17 |   Sonu /Manto/   |        |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I18 |  Risha /Manto/   |        |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I19 |   Smit /Manto/   |        |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I20 |  Jenish /Manto/  |        |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I21 | Murthy /Jathiya/ |   M    |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I22 |  Sankar /Manto/  |   M    |     NA     |  NA |  True |     NA     |  {'F5'} |    {'F9'}    |
+| I23 |  Subha /Manto/   |   F    |     NA     |  NA |  True |     NA     |  {'F5'} |    {'F9'}    |
+| I24 |  Suguna /Manto/  |        |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I25 | Suganti /Manto/  |   F    | 2020-04-01 |  0  | False | 2020-04-03 |  {'F5'} |   {'F10'}    |
+| I26 |  Vinaya /Manto/  |        |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I27 |  Ganesh /Manto/  |        |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I28 | Rajathi /Manto/  |        |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I29 |  Rehan /Manto/   |        |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I30 |  Janani /Manto/  |        |     NA     |  NA |  True |     NA     |  {'F5'} |      NA      |
+| I31 | Radhika /Patel/  |   F    | 2020-04-28 |  -1 | False | 2021-02-02 |    NA   |    {'F8'}    |
+| I32 | Damodar /Patel/  |   M    | 2019-04-04 |  1  |  True |     NA     |  {'F8'} |      NA      |
+| I33 |  Palani /Manto/  |   M    |     NA     |  NA |  True |     NA     |    NA   |   {'F10'}    |
+| I34 | Suganti /Manto/  |   F    | 1998-06-02 |  21 |  True |     NA     |    NA   |    {'F7'}    |
+| I35 |   Rani /Manto/   |   F    |     NA     |  NA |  True |     NA     | {'F10'} |   {'F11'}    |
+| I36 |  Jamuna /Manto/  |   F    |     NA     |  NA |  True |     NA     | {'F10'} |   {'F12'}    |
+| I37 |  Rakesh /Manto/  |   M    |     NA     |  NA |  True |     NA     |    NA   |   {'F12'}    |
+| I38 |  Ganuu /Manto/   |   M    |     NA     |  NA |  True |     NA     | {'F11'} |      NA      |
+| I40 |  Yashu /Manto/   |   F    |     NA     |  NA |  True |     NA     | {'F12'} |      NA      |
++-----+------------------+--------+------------+-----+-------+------------+---------+--------------+
 
 
 
   Family
-+----+------------+------------+------------+-----------------+---------+-----------------+------------------------------------------------------------------------------------------------------------------+
-| ID |  Married   |  Divorced  | Husband ID |   Husband Name  | Wife ID |    Wife Name    |                                                     Children
-                                       |
-+----+------------+------------+------------+-----------------+---------+-----------------+------------------------------------------------------------------------------------------------------------------+
-| F1 | 2000-07-13 |     NA     |     I1     | Hussain /Manto/ |    I5   |  Kavita /Manto/ |                                                   {'I6', 'I7'}
-                                       |
-| F2 | 2001-04-04 | 2002-05-02 |     I1     | Hussain /Manto/ |    I2   | Savitri /Manto/ |                                                   {'I3', 'I4'}
-                                       |
-| F3 |     NA     |     NA     |     I8     | Ramesh /Huliya/ |    I3   |  Manju /Manto/  |                                                     {'I14'}
-                                       |
-| F4 | 1990-02-02 |     NA     |     I4     |  Rizwan /Manto/ |    I9   |  Ramya /Bhevri/ |                                                     {'I15'}
-                                       |
-| F5 | 2012-09-06 | 2010-11-06 |     I6     |  Billa /Manto/  |   I10   | Tulsi /Gaikwad/ | {'I21', 'I20', 'I24', 'I16', 'I23', 'I29', 'I17', 'I25', 'I27', 'I26', 'I18', 'I22', 'I12', 'I30', 'I28', 'I19'} |
-| F6 |     NA     |     NA     |    I11     |  Yogesh /Patel/ |    I7   |  Rashmi /Manto/ |                                                     {'I13'}
-                                       |
-| F7 | 2012-04-04 |     NA     |    I22     |  Sankar /Manto/ |   I23   |  Subha /Manto/  |                                                        NA
-                                       |
-+----+------------+------------+------------+-----------------+---------+-----------------+------------------------------------------------------------------------------------------------------------------+
++-----+------------+------------+------------+-----------------+---------+-----------------+------------------------------------------------------------------------------------------------------------------+
+|  ID |  Married   |  Divorced  | Husband ID |   Husband Name  | Wife ID |    Wife Name    |                                                     Children 
+                                                    |
++-----+------------+------------+------------+-----------------+---------+-----------------+------------------------------------------------------------------------------------------------------------------+
+|  F1 | 2000-07-13 |     NA     |     I1     | Hussain /Manto/ |    I5   |  Kavita /Manto/ |                                                   {'I6', 'I7'}                                                   |
+|  F2 | 2001-04-24 | 2002-05-02 |     I1     | Hussain /Manto/ |    I2   | Savitri /Manto/ |                                                   {'I4', 'I3'}                                                   |
+|  F3 |     NA     |     NA     |     I8     | Ramesh /Huliya/ |    I3   |  Manju /Manto/  |                                                     {'I14'}  
+                                                    |
+|  F4 | 1990-02-02 |     NA     |     I4     |  Rizwan /Manto/ |    I9   |  Ramya /Bhevri/ |                                                     {'I15'}  
+                                                    |
+|  F5 | 2012-09-06 | 2010-11-06 |     I6     |  Billa /Manto/  |   I10   | Tulsi /Gaikwad/ | {'I24', 'I30', 'I20', 'I16', 'I21', 'I17', 'I26', 'I25', 'I27', 'I19', 'I28', 'I29', 'I12', 'I18', 'I22', 'I23'} |
+|  F6 |     NA     |     NA     |    I11     |  Yogesh /Patel/ |    I7   |  Rashmi /Manto/ |                                                     {'I13'}  
+                                                    |
+|  F7 | 2000-01-01 |     NA     |    I12     |   Sonu /Manto/  |   I34   | Suganti /Manto/ |                                                        NA    
+                                                    |
+|  F8 |     NA     |     NA     |    I13     |  Jinesh /Patel/ |   I31   | Radhika /Patel/ |                                                     {'I32'}  
+                                                    |
+|  F9 | 2012-04-04 |     NA     |    I22     |  Sankar /Manto/ |   I23   |  Subha /Manto/  |                                                        NA    
+                                                    |
+| F10 | 2000-01-01 |     NA     |    I33     |  Palani /Manto/ |   I25   | Suganti /Manto/ |                                                  {'I35', 'I36'}                                                  |
+| F11 |     NA     |     NA     |    I37     |  Rakesh /Manto/ |   I36   |  Jamuna /Manto/ |                                                     {'I40'}  
+                                                    |
++-----+------------+------------+------------+-----------------+---------+-----------------+------------------------------------------------------------------------------------------------------------------+
 
 
 
@@ -62,26 +76,59 @@
 ERROR: INDIVIDUAL: US03: I2 Died 1985-07-13 before born 1999-06-05
 ERROR: Family: US04: F5 Divorce 2010-11-06 before married 2012-09-06
 ERROR: Family: US02: F1 : Wife's birthdate  2001-07-17  after marriage date  2000-07-13
-ERROR: Family: US02: F7 : Husband's birthdate  NA  after marriage date  2012-04-04
-ERROR: Family: US02: F7 : Wife's birthdate  NA  after marriage date  2012-04-04
-ERROR: Family: US05: F2 : Wife's deathdate  NA  before marriage date  2001-04-04
+ERROR: Family: US02: F7 : Husband's birthdate  NA  after marriage date  2000-01-01
+ERROR: Family: US02: F9 : Husband's birthdate  NA  after marriage date  2012-04-04
+ERROR: Family: US02: F9 : Wife's birthdate  NA  after marriage date  2012-04-04
+ERROR: Family: US02: F10 : Husband's birthdate  NA  after marriage date  2000-01-01
+ERROR: Family: US02: F10 : Wife's birthdate  2020-04-01  after marriage date  2000-01-01
+ERROR: Family: US05: F2 : Wife's deathdate  NA  before marriage date  2001-04-24
 ERROR: INDIVIDUAL: US01: I15 Birthday 2025-12-03 occurs in future
-ERROR: Family: US08:  Child  I3 born  1990-11-10 before marriage date on  2001-04-04
-ERROR: Family: US08:  Child  I4 born  1987-05-09 before marriage date on  2001-04-04
+ERROR: INDIVIDUAL: US01: I31 Birthday 2020-04-28 occurs in future
+ERROR: INDIVIDUAL: US01: I31 Death 2021-02-02 occurs in future
+ERROR: Family: US08:  Child  I3 born  1990-11-10 before marriage date on  2001-04-24
+ERROR: Family: US08:  Child  I4 born  1987-05-09 before marriage date on  2001-04-24
 ERROR: Family: US08:  Child  I6 born  1990-10-05 before marriage date on  2000-07-13
 ERROR: Family: US08:  Child  I7 born  1992-12-06 before marriage date on  2000-07-13
 ERROR: Family: US15:  Family F5 has greater than or equal to 15 siblings
 ERROR: Family: US18 Family F5 siblings are married
 ERROR: INDIVIDUAL: US09: I3 :Birth is After death of Parents
 ERROR: INDIVIDUAL: US09: I4 :Birth is After death of Parents
+ERROR: INDIVIDUAL: US09: I32 :Birth is After death of Parents
 ERROR: INDIVIDUAL: US10: I2 :Marriage is done before 14
-ERROR: INDIVIDUAL: US10: I4 :Marriage is done before 14
+ERROR: INDIVIDUAL: US10: I4 :Marriage is done before 14 
 ERROR: INDIVIDUAL: US10: I5 :Marriage is done before 14
 ERROR: INDIVIDUAL: US10: I9 :Marriage is done before 14
+ERROR: INDIVIDUAL: US10: I25 :Marriage is done before 14
+ERROR: INDIVIDUAL: US10: I34 :Marriage is done before 14
 ERROR: Family: US06: F2 : Divorced 2002-05-02 after wife's ( @I2@ ) death on 1985-07-13
 ERROR: INDIVIDUAL: US07: I13 : More than 150 years old - Birth date 1800-01-01
 ERROR: FAMILY: US16: F5 : has MALE INDIVIDUAL I21 with a different last name jathiya than FAMILY last name manto
 EEROR: INDIVIDUAL: US23: I17 has same name and birthdate as I12
+ERROR: INDIVIDUAL: US22 :I38 id is not unique
+ERROR: Family : US22 :F11 id is not unique
+ERROR: Family : US25 : F1 doesn't have unique first names
+ERROR: Family : US25 : F2 doesn't have unique first names
 ERROR: Family : US25 : F5 doesn't have unique first names
-INDIVIDUAL: US35: I25 :Birth of the people who were born in the last 30 days
-INDIVIDUAL: US36: I25 :Death of the people who were died in the last 30 days
+ERROR: Family : US25 : F10 doesn't have unique first names
+ERROR: INDIVIDUAL: US35: I25 :Birth of the people who were born in the last 30 days
+ERROR: INDIVIDUAL: US36: I25 :Death of the people who were died in the last 30 days
+EEROR: FAMILY: US24: Family  F10 has same name( Suganti /Manto/ ) and marriage date( 2000-01-01 ) of the spouse as Family F7
+User Story 28:
+
+ +-----------+---------------+-----------------+------------+-----+
+| Family ID | Individual Id |       Name      | Birthdate  | Age |
++-----------+---------------+-----------------+------------+-----+
+|     F1    |       I6      |  Billa /Manto/  | 1990-10-05 |  29 |
+|     F1    |       I7      |  Rashmi /Manto/ | 1992-12-06 |  27 |
+|     F2    |       I4      |  Rizwan /Manto/ | 1987-05-09 |  32 |
+|     F2    |       I3      |  Manju /Manto/  | 1990-11-10 |  29 |
+|     F4    |      I15      |  Nikhil /Manto/ | 2025-12-03 |  5  |
+|     F5    |      I25      | Suganti /Manto/ | 2020-04-01 |  0  |
+|     F6    |      I13      |  Jinesh /Patel/ | 1800-01-01 | 220 |
+|     F8    |      I32      | Damodar /Patel/ | 2019-04-04 |  1  |
++-----------+---------------+-----------------+------------+-----+
+ERROR: INDIVIDUAL: US38: I4 :Birthdate  05-09 of the people in the upcoming 30 days
+ERROR: FAMILY: US39: F2 :marriage Date  04-24 of the people in the upcoming 30 days
+ERROR: INDIVIDUAL: US42: I15 Birthday date is in illegitimate date format
+ERROR: INDIVIDUAL: US42: I31 Death date is in illegitimate date format
+ERROR: INDIVIDUAL: US33: I32 is an orphaned child

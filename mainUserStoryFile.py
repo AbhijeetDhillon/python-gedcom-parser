@@ -299,38 +299,46 @@ def US18(i, f):
     return "True"
 
 
-def US22(i, f):
+def US22(i, f, ind_dup, fam_dup):
     fid_arr = []
     iid_arr = []
     flagi = 0
     flagf = 0
 
-    for x in i.keys():
-        iid_arr.append(x[1:-1])
-    for x in f.keys():
-        fid_arr.append(x[1:-1])
+    for i in range(len(ind_dup)-1):
+        # print(ind_dup[i][1:-1])
+        print("ERROR: INDIVIDUAL: US22 :" +
+              ind_dup[i][1:-1] + " id is not unique")
+    for j in fam_dup:
+        # print(j[1:-1])
+        print("ERROR: Family : US22 :" + j[1:-1] + " id is not unique")
 
-    for i in range(len(iid_arr)):
-        for i1 in range(len(iid_arr)):
-            if i != i1:
-                if iid_arr[i] == iid_arr[i1]:
-                    # flagi = 1
-                    print("ERROR: Individual: US22 :" +
-                          iid_arr[i1] + " id is not unique")
-            # else:
-            #     print(iid_arr[i1])
-    for i in range(len(fid_arr)):
-        for i1 in range(len(fid_arr)):
-            if i != i1:
-                if fid_arr[i] == fid_arr[i1]:
-                    # flagf = 1
-                    print("ERROR: Family : US22 :" +
-                          fid_arr[i1] + " id is not unique")
-            # else:
-            #     print(fid_arr[i1])
+    # for x in i.keys():
+    #     iid_arr.append(x[1:-1])
+    # for x in f.keys():
+    #     fid_arr.append(x[1:-1])
 
-    # print(fid_arr)
-    # print(iid_arr)
+    # for i in range(len(iid_arr)):
+    #     for i1 in range(len(iid_arr)):
+    #         if i != i1:
+    #             if iid_arr[i] == iid_arr[i1]:
+    #                 # flagi = 1
+    #                 print("ERROR: Individual: US22 :" +
+    #                       iid_arr[i1] + " id is not unique")
+    #         # else:
+    #         #     print(iid_arr[i1])
+    # for i in range(len(fid_arr)):
+    #     for i1 in range(len(fid_arr)):
+    #         if i != i1:
+    #             if fid_arr[i] == fid_arr[i1]:
+    #                 # flagf = 1
+    #                 print("ERROR: Family : US22 :" +
+    #                       fid_arr[i1] + " id is not unique")
+    #         # else:
+    #         #     print(fid_arr[i1])
+
+    # # print(fid_arr)
+    # # print(iid_arr)
     return "True"
 
 
@@ -667,6 +675,7 @@ def us28_sibilings_byAge(indiDetails, famDetails):
     today = datetime.datetime.now()
     today = datetime.datetime.strftime(today, '%Y-%m-%d')
     for key, value in famDetails.items():
+        sorted_keys = {}
         for i, cvalue in value["Children"].items():
             childKey = cvalue[1:-1]
             for ikey, ivalue in indiDetails.items():
@@ -679,6 +688,7 @@ def us28_sibilings_byAge(indiDetails, famDetails):
 
         sorted_keys = OrderedDict(sorted(siblingDetails.items(
         ), key=lambda x: getitem(x[1], 'Age'), reverse=True))
+        siblingDetails = {}
         for skey, svalue in sorted_keys.items():
             orderDict.add_row([key[1:-1], skey, svalue['Name'],
                                svalue['Birthday'], svalue['Age']])
@@ -932,7 +942,7 @@ if __name__ == '__main__':
     # sprint2
     US15(ind_details, fam_details)
     US18(ind_details, fam_details)
-    # userstory09(ind_details, fam_details)
+    userstory09(ind_details, fam_details)
     userstory10(ind_details, fam_details)
     us06_div_b4_death(ind_details, fam_details)
     us07_age_lessthan_150(ind_details)
@@ -940,11 +950,10 @@ if __name__ == '__main__':
     # sprint3
     us16_male_last_name(ind_details, fam_details)
     us23_sameName_sameBirthDate(ind_details)
-    US22(ind_details, fam_details)
+    US22(ind_details, fam_details, ind_dup, fam_dup)
     US25(ind_details, fam_details)
     userstory35(ind_details)
     userstory36(ind_details)
-    print("Unique", ind_dup, fam_dup)
 
     # sprint4
     us24_uniqueFamily_bySpouses(fam_details)
