@@ -363,9 +363,12 @@ def US25(i, f):
     for x in range(len(f.items())):
         lis = []
         for i in cname[x]:
-            lis.append(i.split('/')[0])
-        lis.append(hname[x].split('/')[0])
-        lis.append(wname[x].split('/')[0])
+            if(i != None):
+                lis.append(i.split('/')[0])
+            if(hname[x] != None):
+                lis.append(hname[x].split('/')[0])
+            if(wname[x] != None):
+                lis.append(wname[x].split('/')[0])
         # print(lis)
 
         flag = 0
@@ -914,7 +917,7 @@ if __name__ == '__main__':
 
     filename1 = "Family.ged"
     filename = "NewFamily.ged"
-    fam_details, ind_details = file_reading_gen(filename)
+    fam_details, ind_details, ind_dup, fam_dup = file_reading_gen(filename)
     formingPrettyTable(fam_details, ind_details)
 
     # Calling User Stories
@@ -929,7 +932,7 @@ if __name__ == '__main__':
     # sprint2
     US15(ind_details, fam_details)
     US18(ind_details, fam_details)
-    userstory09(ind_details, fam_details)
+    # userstory09(ind_details, fam_details)
     userstory10(ind_details, fam_details)
     us06_div_b4_death(ind_details, fam_details)
     us07_age_lessthan_150(ind_details)
@@ -941,6 +944,7 @@ if __name__ == '__main__':
     US25(ind_details, fam_details)
     userstory35(ind_details)
     userstory36(ind_details)
+    print("Unique", ind_dup, fam_dup)
 
     # sprint4
     us24_uniqueFamily_bySpouses(fam_details)

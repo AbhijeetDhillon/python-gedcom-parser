@@ -6,13 +6,16 @@ import unittest
 from prettytable import PrettyTable
 
 
-
 li = {"0": ["INDI", "FAM", "HEAD", "TRLR", "NOTE"], "1": ["NAME", "SEX", "BIRT",
                                                           "DEAT", "FAMC", "FAMS", "MARR", "HUSB", "WIFE", "CHIL", "DIV"], "2": ["DATE"]}
 # imports
 
 ind_details = {}
 fam_details = {}
+iid = []
+ind_dup = []
+fid = []
+fam_dup = []
 # gedcom parser
 
 
@@ -39,15 +42,14 @@ def initialize_var(individual_id, name, sex, birt, deat, fams, famc, fam, marr, 
 def dateCalc(dat):
 
     try:
-        if(len(datetime.datetime.strptime(dat,'%d %b %Y').strftime('%Y-%m-%d')) == 10):
-           return datetime.datetime.strptime(dat,'%d %b %Y').strftime('%Y-%m-%d') 
+        if(len(datetime.datetime.strptime(dat, '%d %b %Y').strftime('%Y-%m-%d')) == 10):
+            return datetime.datetime.strptime(dat, '%d %b %Y').strftime('%Y-%m-%d')
 
     except ValueError:
-           if((len(dat)==4)):
-               return dat
-           else:
-               return 'NA'
-      
+        if((len(dat) == 4)):
+            return dat
+        else:
+            return 'NA'
 
 
 def calcAge(dob):
@@ -56,11 +58,10 @@ def calcAge(dob):
     else:
         from datetime import datetime, date
         today = date.today()
-        born = datetime.strptime(dob,'%Y-%m-%d')
-        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        born = datetime.strptime(dob, '%Y-%m-%d')
+        age = today.year - born.year - \
+            ((today.month, today.day) < (born.month, born.day))
         return age
-
-
 
 
 def file_reading_gen(path):
@@ -73,7 +74,7 @@ def file_reading_gen(path):
     birt = ""
     deat = ""
     fs = 1
-    cs=1
+    cs = 1
     # fc = 1
     famc = ""
     fams = {}
@@ -86,7 +87,7 @@ def file_reading_gen(path):
     date = ""
     idcount = 0
     fcount = 0
-   
+
     for line in file:
 
         liner = line.split()
@@ -103,7 +104,7 @@ def file_reading_gen(path):
                         elif liner[1] == "SEX":
                             sex = (' '.join(liner[2::]))
                         elif liner[1] == "FAMS":
-                            fams[fs]=(' '.join(liner[2::]))
+                            fams[fs] = (' '.join(liner[2::]))
                             fs = fs + 1
                         elif liner[1] == "FAMC":
                             famc = (' '.join(liner[2::]))
@@ -118,7 +119,7 @@ def file_reading_gen(path):
                             bcount = True
                         elif liner[1] == "DEAT":
                             dcount = True
-                            deat="dead"
+                            deat = "dead"
                         elif liner[1] == "MARR":
                             marrcount = True
                         elif liner[1] == "DIV":
@@ -128,7 +129,7 @@ def file_reading_gen(path):
                                 birt = ' '.join(liner[2::])
                                 birt = dateCalc(birt)
                                 bcount = False
-                                
+
                             if dcount == True:
                                 deat = ' '.join(liner[2::])
                                 deat = dateCalc(deat)
@@ -143,30 +144,42 @@ def file_reading_gen(path):
                                 divcount = False
 
                     elif (liner[0] == '0' and liner[2] in ["INDI", "FAM"]):
-                            bcount = False
-                            dcount = False
-                            marrcount = False
-                            divcount = False
-                            if idcount == 1:
-                                ind_details[individual_id] = {"Name": name, 'Gender': sex, 'Birthday': birt, 'Death': deat, 'FAMS': fams, 'FAMC': famc}
-                                   
-                            if fcount ==1:
-                                fam_details[fam] = {"Married": marr, 'Divorced': div, 'Husband Id': husb, 'Husband Name': ind_details.get(husb,{}).get('Name'), 'Wife Id': wife, 'Wife Name':ind_details.get(wife,{}).get('Name'),'Children':chil }
+                        bcount = False
+                        dcount = False
+                        marrcount = False
+                        divcount = False
+                        if idcount == 1:
+                            if individual_id in iid:
+                                if individual_id not in ind_dup:
+                                    ind_dup.append(individual_id)
+                            iid.append(individual_id)
 
-                            if liner[2] == "INDI":
-                                individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs=initialize_var(individual_id,name,sex,birt,deat,fams,famc,fam,marr,husb,wife,chil,div,date,fs)
-                                individual_id = liner[1]
-                                idcount = 1
-                            elif liner[2] == "FAM":
-                                marr,div,husb,wife,chil = 'NA','NA',0,0,{}
-                                fam = liner[1]
-                                fcount = 1
+                            ind_details[individual_id] = {
+                                "Name": name, 'Gender': sex, 'Birthday': birt, 'Death': deat, 'FAMS': fams, 'FAMC': famc}
+
+                        if fcount == 1:
+
+                            fam_details[fam] = {"Married": marr, 'Divorced': div, 'Husband Id': husb, 'Husband Name': ind_details.get(
+                                husb, {}).get('Name'), 'Wife Id': wife, 'Wife Name': ind_details.get(wife, {}).get('Name'), 'Children': chil}
+
+                        if liner[2] == "INDI":
+                            individual_id, name, sex, birt, deat, fams, famc, fam, marr, husb, wife, chil, div, date, fs = initialize_var(
+                                individual_id, name, sex, birt, deat, fams, famc, fam, marr, husb, wife, chil, div, date, fs)
+                            individual_id = liner[1]
+                            idcount = 1
+                        elif liner[2] == "FAM":
+                            marr, div, husb, wife, chil = 'NA', 'NA', 0, 0, {}
+                            fam = liner[1]
+                            fcount = 1
 
                     elif((liner[1] in ["_CURRENT"])):
-                        fcount = fam_details[fam] = {"Married": marr, 'Divorced': div, 'Husband Id': husb, 'Husband Name': ind_details.get(husb,{}).get('Name'), 'Wife Id': wife, 'Wife Name':ind_details.get(wife,{}).get('Name'),'Children':chil }
+                        if fam in fid:
+                            fam_dup.append(fam)
+                        fid.append(fam)
+                        fcount = fam_details[fam] = {"Married": marr, 'Divorced': div, 'Husband Id': husb, 'Husband Name': ind_details.get(
+                            husb, {}).get('Name'), 'Wife Id': wife, 'Wife Name': ind_details.get(wife, {}).get('Name'), 'Children': chil}
 
         else:
             pass
-    
 
-    return fam_details,ind_details
+    return fam_details, ind_details, ind_dup, fam_dup
